@@ -1,8 +1,8 @@
-import React, { useCallback, Fragment } from 'react';
-import styled from 'styled-components';
-import Generic from '../resource/generic.jpg';
+import React, { useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import styled from 'styled-components';
 import InfoBlock from '../components/InfoBlock';
+import Generic from '../resource/generic.jpg';
 
 const Header = styled.div`
     position: relative;
@@ -46,21 +46,25 @@ const OrderNow = styled.div`
 `;
 
 const Home = () => {
+    useEffect(() => {
+        document.title = 'KAMI SUSHI - Home';
+        return () => document.title = 'KAMI SUSHI';
+    }, []);
+
     const history = useHistory();
 
     const orderNow = useCallback(() => {
-        history.push('/speisekarte');
-        document.title = 'KAMI SUSHI - Speisekarte';
+        history.push('/jetzt-bestellen');
     }, [history]);
 
     return (
-        <Fragment>
+        <>
             <Header>
                 <Image src={Generic}></Image>
                 <OrderNow onClick={orderNow}>JETZT BESTELLEN</OrderNow>
             </Header>
             <InfoBlock />
-        </Fragment>
+        </>
     );
 };
 

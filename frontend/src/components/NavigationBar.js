@@ -39,31 +39,11 @@ const Item = styled.div`
 
 const NavigationBar = () => {
     const history = useHistory();
-
-    const main = useCallback(() => {
-        history.push('/');
-        document.title = 'KAMI SUSHI';
-    }, [history]);
-
-    const home = useCallback(() => {
-        history.push('/home');
-        document.title = 'KAMI SUSHI - Home';
-    }, [history]);
-
-    const menu = useCallback(() => {
-        history.push('/speisekarte');
-        document.title = 'KAMI SUSHI - Speisekarte';
-    }, [history]);
-
-    const contact = useCallback(() => {
-        history.push('/kontakt');
-        document.title = 'KAMI SUSHI - Kontakt';
-    }, [history]);
-
-    const imprint = useCallback(() => {
-        history.push('/impressum');
-        document.title = 'KAMI SUSHI - Impressum';
-    }, [history]);
+    const main = useCallback(() => history.push('/'), [history]);
+    const home = useCallback(() => history.push('/home'), [history]);
+    const menu = useCallback(() => history.push('/speisekarte'), [history]);
+    const contact = useCallback(() => history.push('/kontakt'), [history]);
+    const imprint = useCallback(() => history.push('/impressum'), [history]);
 
     return (
         <Bar>

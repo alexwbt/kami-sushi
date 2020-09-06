@@ -27,20 +27,13 @@ const Link = styled.span`
     display: inline-block;
     padding: 10px 20px;
     text-decoration: underline;
+    cursor: pointer;
 `;
 
 const Footer = () => {
     const history = useHistory();
-
-    const contact = useCallback(() => {
-        history.push('/kontakt');
-        document.title = 'KAMI SUSHI - Kontakt';
-    }, [history]);
-
-    const imprint = useCallback(() => {
-        history.push('/impressum');
-        document.title = 'KAMI SUSHI - Impressum';
-    }, [history]);
+    const contact = useCallback(() => history.push('/kontakt'), [history]);
+    const imprint = useCallback(() => history.push('/impressum'), [history]);
 
     return (
         <Container>

@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const Menu = () => {
+    useEffect(() => {
+        document.title = 'KAMI SUSHI - Speisekarte';
+        return () => document.title = 'KAMI SUSHI';
+    }, []);
+
     return (
         <div>
             Menu

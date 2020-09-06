@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 
-const Imprint = () => {
+const OrderNow = () => {
     useEffect(() => {
-        document.title = 'KAMI SUSHI - Impressum';
+        document.title = 'KAMI SUSHI - Jetzt bestellen';
         return () => document.title = 'KAMI SUSHI';
     }, []);
 
     return (
         <div>
-            Imprint
+            OrderNow
         </div>
     );
 };
 
-export default Imprint;
+export default OrderNow;

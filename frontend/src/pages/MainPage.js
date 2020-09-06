@@ -77,11 +77,7 @@ const OrderNow = styled.div`
 
 const MainPage = () => {
     const history = useHistory();
-
-    const menu = useCallback(() => {
-        history.push('/speisekarte');
-        document.title = 'KAMI SUSHI - Speisekarte';
-    }, [history]);
+    const menu = useCallback(() => history.push('/speisekarte'), [history]);
 
     return (
         <Container>
