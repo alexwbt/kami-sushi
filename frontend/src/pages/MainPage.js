@@ -77,14 +77,14 @@ const OrderNow = styled.div`
 
 const MainPage = () => {
     const history = useHistory();
-    const menu = useCallback(() => history.push('/speisekarte'), [history]);
+    const orderNow = useCallback(() => history.push('/jetzt-bestellen'), [history]);
 
     return (
         <Container>
             <Image src={Main} />
             <Panel>
                 <div>Sushi-Spezialitäten frisch zubereitet</div>
-                <OrderNow onClick={menu}>JETZT BESTELLEN</OrderNow>
+                <OrderNow onClick={orderNow}>JETZT BESTELLEN</OrderNow>
             </Panel>
         </Container>
     );

@@ -16,6 +16,8 @@ const styledTheme = {
     red: '#c46868',
     grey: '#ddddde',
     darkGrey: '#222222',
+    secondaryGrey: '#333333',
+    secondaryText: 'grey'
 };
 
 const App = () => {

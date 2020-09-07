@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 const Container = styled.div`
     padding: 10px;
     text-align: center;
-    color: grey;
+    color: ${props => props.theme.secondaryText};
     background-color: ${props => props.theme.darkGrey};
 
     @media (max-width: 600px) {
@@ -15,7 +15,7 @@ const Container = styled.div`
 
 const Line = styled.hr`
     margin: 10px;
-    border-color: #333333;
+    border-color: ${props => props.theme.secondaryGrey};
 `;
 
 const Contact = styled.div`
