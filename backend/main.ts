@@ -9,8 +9,6 @@ import menuRouter from "./routers/MenuRouter";
 import handleSocket from "./socket";
 import { loggerMiddleware } from "./utils/logger";
 
-import { sendLoginToken } from "./utils/mailer";
-
 config();
 const { PORT } = process.env;
 
