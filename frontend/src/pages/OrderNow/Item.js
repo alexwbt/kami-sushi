@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
 const ItemWrapper = styled.div`
-    padding: 10px;
+    padding: 5px;
 `;
 
 const ItemComponent = styled.div`
@@ -28,17 +28,26 @@ const ItemDetail = styled.div`
 const ItemName = styled.div`
     font-size: 25px;
     overflow: hidden;
+    @media (max-width: 900px) {
+        font-size: 15px;
+    }
 `;
 
 const ItemPrice = styled.div`
     padding: 3px 0;
     color: ${props => props.theme.currency};
     font-size: 20px;
+    @media (max-width: 900px) {
+        font-size: 12px;
+    }
 `;
 
 const ItemDescription = styled.div`
     font-size: 18px;
     color: ${props => props.theme.secondaryText};
+    @media (max-width: 900px) {
+        font-size: 11px;
+    }
 `;
 
 const Button = styled.button`
@@ -55,6 +64,9 @@ const Button = styled.button`
 
     :focus {
         outline: none;
+    }
+    @media (max-width: 900px) {
+        font-size: 11px;
     }
 `;
 

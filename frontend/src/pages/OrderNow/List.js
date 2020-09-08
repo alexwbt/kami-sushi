@@ -24,14 +24,14 @@ const Column = styled.div`
     display: inline-block;
     vertical-align: top;
     position: relative;
-    width: 33.33%;
+    width: 25%;
 
     @media (max-width: 900px) {
-        width: 50%;
+        width: 33.33%;
     }
 
     @media (max-width: 600px) {
-        width: 100%;
+        width: 50%;
     }
 `;
 
@@ -44,7 +44,7 @@ const List = ({ add, data, order }) => {
 
     useEffect(() => {
         const resize = () => {
-            let count = 1;
+            let count = 2;
             if (window.innerWidth > 600) count++;
             if (window.innerWidth > 900) count++;
             setCount(count);
@@ -61,7 +61,8 @@ const List = ({ add, data, order }) => {
         <Container>
             <Column>{data.slice(0, divide).map(mapFunction)}</Column>
             {columnCount > 1 && <Column>{data.slice(divide, divide * 2).map(mapFunction)}</Column>}
-            {columnCount > 2 && <Column>{data.slice(divide * 2).map(mapFunction)}</Column>}
+            {columnCount > 2 && <Column>{data.slice(divide * 2, divide * 3).map(mapFunction)}</Column>}
+            {columnCount > 2 && <Column>{data.slice(divide * 3).map(mapFunction)}</Column>}
         </Container>
     );
 };
