@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import InfoBlock from '../components/InfoBlock';
-import Generic from '../resource/generic.jpg';
+import InfoBlock from './InfoBlock';
+import Generic from 'resource/generic.jpg';
 
 const Header = styled.div`
     position: relative;

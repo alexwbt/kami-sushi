@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import Info1 from '../resource/info1.png';
-import Info2 from '../resource/info2.png';
-import Info3 from '../resource/info3.png';
+import Info1 from 'resource/info1.png';
+import Info2 from 'resource/info2.png';
+import Info3 from 'resource/info3.png';
 
 const Container = styled.div`
     padding: 50px 0;

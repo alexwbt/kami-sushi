@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
-import Main from '../resource/main.png'
-import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import Main from 'resource/main.png';
+import styled from 'styled-components';
 
 const Container = styled.div`
     position: relative;

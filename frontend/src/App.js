@@ -1,15 +1,15 @@
+import Admin from 'admin';
+import Footer from 'components/Footer';
+import NavigationBar from 'components/NavigationBar';
+import Contact from 'pages/Contact';
+import Home from 'pages/Home';
+import Imprint from 'pages/Imprint';
+import MainPage from 'pages/MainPage';
+import Menu from 'pages/Menu';
+import OrderNow from 'pages/OrderNow';
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import Footer from './components/Footer';
-import NavigationBar from './components/NavigationBar';
-import Admin from './admin';
-import Contact from './pages/Contact';
-import Home from './pages/Home';
-import Imprint from './pages/Imprint';
-import MainPage from './pages/MainPage';
-import Menu from './pages/Menu';
-import OrderNow from './pages/OrderNow';
 
 const styledTheme = {
     dark: '#111115',
@@ -17,7 +17,9 @@ const styledTheme = {
     grey: '#ddddde',
     darkGrey: '#222222',
     secondaryGrey: '#333333',
-    secondaryText: 'grey'
+    secondaryText: 'grey',
+    currency: 'silver',
+    currencyDark: '#707070'
 };
 
 const App = () => {

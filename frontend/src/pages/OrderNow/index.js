@@ -1,7 +1,8 @@
+import Loading from 'components/Loading';
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import OrderItemList from '../components/OrderItemList';
-import Loading from '../components/Loading';
+import List from './List';
+import Cart from './Cart';
 
 const fakeMenuData = [
     {
@@ -9,57 +10,79 @@ const fakeMenuData = [
         items: [
             {
                 id: 0,
-                item_name: 'item_1_ TESTs',
+                item_name: 'item_1_TESTsitem_1_ TESTsitem_1_TESTsitem_1_ TESTs',
                 item_description: 'description of this item bla bla bla',
                 item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
+                price: 100.23
             },
             {
                 id: 1,
                 item_name: 'item_2',
                 item_description: 'description of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bla',
                 item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
+                price: 5.12
             },
             {
                 id: 2,
                 item_name: 'item_3',
                 item_description: 'description of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bla',
                 item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
+                price: 100.2
             },
             {
                 id: 3,
                 item_name: 'item_4',
                 item_description: 'description of this item bla bla bla',
                 item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
+                price: 100.2
             },
             {
                 id: 4,
                 item_name: 'item_5',
                 item_description: 'description of this item bla bla bla',
                 item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
+                price: 100.2
             },
             {
                 id: 5,
                 item_name: 'item_6',
                 item_description: 'description of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bla',
                 item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/f4/tori-karaage.jpg',
+                price: 100.2
             },
             {
                 id: 6,
                 item_name: 'item_7',
                 item_description: 'description of this item bla bla bla',
                 item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/14/1f/c3/e5/20180813-210209-largejpg.jpg',
+                price: 100.2
             },
             {
                 id: 7,
                 item_name: 'item_8',
                 item_description: 'description of this item bla bla bla',
                 item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
+                price: 100.2
             },
         ]
     },
     {
         name: 'Hosomaki',
         items: [
+            {
+                id: 6,
+                item_name: 'item_7',
+                item_description: 'description of this item bla bla bla',
+                item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/14/1f/c3/e5/20180813-210209-largejpg.jpg',
+                price: 100.2
+            },
+            {
+                id: 7,
+                item_name: 'item_8',
+                item_description: 'description of this item bla bla bla',
+                item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
+                price: 100.2
+            },
         ]
     },
     {
@@ -94,6 +117,10 @@ const MenuLink = styled.div`
     border-radius: 10px;
     background-color: ${props => props.selected ? props.theme.dark : props.theme.darkGrey};
     cursor: pointer;
+
+    @media (max-width: 600px) {
+        font-size: 15px;
+    }
 `;
 
 const LoadingContainer = styled.div`
@@ -103,40 +130,73 @@ const LoadingContainer = styled.div`
     padding-top: 20vh;
 `;
 
+const Menu = ({ data, i, setMenu, menu }) => {
+    const selectMenu = useCallback(() => setMenu(i), [i, setMenu]);
+    return <MenuLink key={i} selected={menu === i} onClick={selectMenu}>{data.name}</MenuLink>
+};
+
 const OrderNow = () => {
     useEffect(() => {
         document.title = 'KAMI SUSHI - Jetzt bestellen';
-        return () => document.title = 'KAMI SUSHI';
+        return () => document.title = 'KAMI SUSHI asdasd';
     }, []);
 
-    const [order, setOrder] = useState([]);
+    const [order, setOrder] = useState(null);
     const [menu, setMenu] = useState(0);
     const [data, setData] = useState(null);
 
     useEffect(() => {
         setTimeout(() => {
             setData(fakeMenuData);
+
+            const order = JSON.parse(localStorage.getItem('order'));
+            const newOrder = [];
+            if (order) {
+                for (const item of order) {
+                    let menuItem = (() => {
+                        for (const menu of fakeMenuData) {
+                            const menuItem = menu.items.find(i => i.id === item.id);
+                            if (menuItem) return menuItem;
+                        }
+                    })();
+                    if (menuItem) newOrder.push({ ...menuItem, count: item.count });
+                }
+            }
+            setOrder(newOrder);
         }, 100);
     }, []);
 
-    const addToOrder = useCallback((itemId, count) => {
+    useEffect(() => {
+        if (order !== null) {
+            localStorage.setItem('order', JSON.stringify(order.map(i => ({
+                id: i.id,
+                count: i.count
+            }))));
+        }
+    }, [order]);
+
+    const addToOrder = useCallback((item, count) => {
         setOrder(order => {
-            // const item = order.find(item => item.id === itemId);
-            
-            console.log(order);
-            return order.concat('test');
-            // if (item) {
-            //     item.count += count;
-            //     return order.filter(item => item.count > 0);
-            // }
-            // return order.concat({ id: itemId, count: 1 });
+            const newOrder = [];
+            let added = false;
+            for (const oldItem of order) {
+                if (oldItem.id === item.id) {
+                    added = true;
+                    const newCount = oldItem.count + count;
+                    if (newCount > 0) newOrder.push({ ...item, count: newCount });
+                } else newOrder.push({ ...oldItem });
+            }
+            if (!added && count > 0) {
+                newOrder.push({ ...item, count });
+            }
+            return newOrder;
         });
-        return 0;
     }, []);
 
-    if (data) return <>
-        <Menus>{data.map((data, i) => <MenuLink key={i} selected={menu === i} onClick={() => setMenu(i)}>{data.name}</MenuLink>)}</Menus>
-        <OrderItemList add={addToOrder} data={data[menu].items} order={order} />
+    if (data && menu >= 0) return <>
+        <Menus>{data.map((data, i) => <Menu key={i} {...{ data, i, setMenu, menu }} />)}</Menus>
+        <List add={addToOrder} data={data[menu].items} order={order} />
+        <Cart order={order} add={addToOrder} />
     </>;
     return <LoadingContainer><Loading /></LoadingContainer>;
 };
