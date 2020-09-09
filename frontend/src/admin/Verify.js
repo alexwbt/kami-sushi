@@ -1,5 +1,7 @@
 import React, { useCallback, useState } from 'react';
+import { submitToken, submitUsername } from 'services/admin';
 import styled from 'styled-components';
+import Loading from 'components/Loading';
 
 const Container = styled.div`
     min-height: 100vh;
@@ -54,32 +56,70 @@ const SetTokenLink = styled.span`
     cursor: pointer;
 `;
 
-const Verify = ({ setToken }) => {
+const ErrorMessage = styled.div`
+    padding-top: 5px;
+    color: ${props => props.theme.red};
+`;
+
+const LoadingContainer = styled.div`
+    background-color: black;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+
+    ${Loading} {
+        top: 45vh;
+    }
+`;
+
+const Verify = ({ setHasToken, load }) => {
     const [sentToken, setSentToken] = useState(false);
     const [input, setInput] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const submitUsername = useCallback(() => {
-        setSentToken(true);
-        setInput('');
-    }, []);
+    const submitName = useCallback(() => {
+        (async () => {
+            setLoading(true);
+            const res = await submitUsername(input);
+            setLoading(false);
+            setInput('');
+            setErrorMessage(res.message);
+            setSentToken(res.status === 200 && res.success);
+        })();
+    }, [input]);
 
-    const submitToken = useCallback(() => {
-        setTimeout(() => {
-            setToken(input);
-        }, 100);
-        setInput('');
-    }, [input, setToken]);
+    const submitVerifyToken = useCallback(() => {
+        (async () => {
+            setLoading(true);
+            const res = await submitToken(input);
+            setLoading(false);
+            setInput('');
+            setErrorMessage(res.message);
+            setHasToken(res.status === 200 && res.success);
+        })();
+    }, [input, setHasToken]);
 
     const onInput = useCallback(e => {
         setInput(e.target.value);
     }, []);
+
+    const toTokenInput = useCallback(() => {
+        setSentToken(true);
+    }, []);
+
+    if (loading || load) return <LoadingContainer><Loading /></LoadingContainer>;
 
     const EnterToken = <>
         <PanelText>
             Enter the verify token.
         </PanelText>
         <TokenInput value={input} onChange={onInput} />
-        <PanelButton onClick={submitToken}>Submit</PanelButton>
+        <PanelButton onClick={submitVerifyToken}>Submit</PanelButton>
+        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </>;
 
     const EnterUsername = <>
@@ -87,11 +127,12 @@ const Verify = ({ setToken }) => {
             Enter a name for this device.
         </PanelText>
         <TokenInput value={input} onChange={onInput} />
-        <PanelButton onClick={submitUsername}>Submit</PanelButton>
+        <PanelButton onClick={submitName}>Submit</PanelButton>
         <br />
+        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
         <PanelSecondaryText>
             You haven't login as admin with this device before or your login token has been cleared.
-            Click <SetTokenLink onClick={submitUsername}>here</SetTokenLink> to set token directly.
+            Click <SetTokenLink onClick={toTokenInput}>here</SetTokenLink> to set token directly.
         </PanelSecondaryText>
     </>;
 

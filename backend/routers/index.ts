@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import Logger from "../utils/logger";
 import * as RateLimit from "express-rate-limit";
 
-export const emailLimiter = RateLimit({ windowMs: 3600000, max: 3 });
+const { EMAIL_LIMITER_WINDOW_MS, EMAIL_LIMITER_MAX } = process.env;
+export const emailLimiter = RateLimit({ windowMs: +EMAIL_LIMITER_WINDOW_MS, max: +EMAIL_LIMITER_MAX });
 
 export const wrapper = (routerFunction: (req: Request, res: Response, next?: NextFunction) => Promise<string | void>) => {
     return async (req: Request, res: Response, next?: NextFunction) => {

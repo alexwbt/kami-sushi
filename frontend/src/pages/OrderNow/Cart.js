@@ -1,12 +1,14 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import styled from 'styled-components';
 import CartItem from "./CartItem";
 
 const Button = styled.div`
     border-radius: 10px;
     padding: 10px;
+    max-width: 400px;
+    margin: auto;
     border: 3px solid white;
-    background-color: ${props => props.theme.dark};
+    background-color: ${props => props.theme.green};
     color: white;
     text-align: center;
     cursor: pointer;
@@ -43,6 +45,14 @@ const Container = styled.div`
         from { transform: 0; }
         to { transform: translateY(100vh); }
     }
+
+    @media (min-width: 1200px) {
+        left: 60vw;
+    }
+
+    @media (min-width: 1500px) {
+        left: 70vw;
+    }
 `;
 
 const CloseButton = styled.div`
@@ -58,7 +68,7 @@ const CloseButton = styled.div`
     }
     :before, :after {
         position: absolute;
-        left: 15px;
+        left: 13px;
         content: '';
         height: 30px;
         width: 2px;
@@ -109,12 +119,23 @@ const Bottom = styled.div`
 const Total = styled.div`
     font-size: 20px;
     display: flex;
-    padding: 5px 0 10px 0;
+    padding: 5px 0 20px 0;
 
     span {
         margin-left: auto;
         color: ${props => props.theme.currencyDark};
+        font-family: Arial;
     }
+`;
+
+const Background = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: black;
+    opacity: 0.3;
 `;
 
 const Cart = ({ order, add }) => {
@@ -131,6 +152,7 @@ const Cart = ({ order, add }) => {
         <ButtonWrapper>
             <Button onClick={toggleCart}>BESTELLLISTE</Button>
         </ButtonWrapper>
+        {open && <Background />}
         {
             open !== null && <Container animate={open ? 'slideUp' : 'slideDown'}>
                 <CloseButton onClick={toggleCart} />

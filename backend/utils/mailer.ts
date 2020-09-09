@@ -26,7 +26,7 @@ export const sendToken = async (username: string) => {
     try {
         const token = await getVerifyToken(username);
         await new AWS.SES({ apiVersion: "2010-12-01" }).sendEmail({
-            Destination: { ToAddresses: [process.env.LOGIN_EMAIL] },
+            Destination: { ToAddresses: [process.env.VERIFY_EMAIL] },
             Message: {
                 Body: {
                     Html: { Charset: "UTF-8", Data: htmlSendTokenTemplate(token) },

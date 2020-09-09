@@ -1,21 +1,21 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
+import { isLoggedIn } from 'services/admin';
 import Manage from './Manage';
 import Verify from './Verify';
 
+
+
 const Admin = () => {
-    const [token, setToken] = useState('');
+    const [hasToken, setHasToken] = useState(null);
 
     useEffect(() => {
-        setToken(localStorage.getItem('AdminToken'));
+        (async () => {
+            setHasToken(await isLoggedIn());
+        })();
     }, []);
 
-    const storeToken = useCallback((token) => {
-        localStorage.setItem('AdminToken', token);
-        setToken(token);
-    }, []);
-
-    if (token) return <Manage token={token} />
-    return <Verify setToken={storeToken} />;
+    if (hasToken) return <Manage hasToken={hasToken} />
+    return <Verify setHasToken={setHasToken} load={hasToken === null} />;
 };
 
 export default Admin;

@@ -10,7 +10,7 @@ export const getUserWithUsername = async (username: string) => {
 };
 
 export const createUser = async (username: string) => {
-    return await knex<User>(USER).insert({ username }).returning("id").first();
+    return (await knex<User>(USER).insert({ username }).returning("id"))[0];
 };
 
 export const verifyUser = async (id: number) => {

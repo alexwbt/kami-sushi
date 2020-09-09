@@ -7,4 +7,4 @@ node_modules/
 
 # winston logger
 log/
-.log
+*.log

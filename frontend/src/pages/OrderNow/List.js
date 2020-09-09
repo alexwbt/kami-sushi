@@ -24,18 +24,10 @@ const Column = styled.div`
     display: inline-block;
     vertical-align: top;
     position: relative;
-    width: 25%;
-
-    @media (max-width: 900px) {
-        width: 33.33%;
-    }
-
-    @media (max-width: 600px) {
-        width: 50%;
-    }
+    width: ${props => props.width}%;
 `;
 
-const List = ({ add, data, order }) => {
+const List = ({ add, data, order, min_column = 2, max_column = 4, padding }) => {
     const [columnCount, setCount] = useState(1);
     const [mount, setMount] = useState(true);
 
@@ -44,25 +36,22 @@ const List = ({ add, data, order }) => {
 
     useEffect(() => {
         const resize = () => {
-            let count = 2;
-            if (window.innerWidth > 600) count++;
-            if (window.innerWidth > 900) count++;
+            let count = min_column;
+            if (window.innerWidth > 600) count = Math.round((min_column + max_column) / 2);
+            if (window.innerWidth > 900) count = max_column;
             setCount(count);
         };
         resize();
         window.addEventListener('resize', resize);
         return () => window.removeEventListener('resize', resize);
-    }, []);
+    }, [min_column, max_column]);
 
     if (!mount || order === null) return null;
     const divide = Math.ceil(data.length / columnCount);
-    const mapFunction = (item, i) => <Item key={i} item={item} add={add} count={order.find(o => o.id === item.id)?.count} />;
+    const mapFunction = (item, i) => <Item key={i} item={item} add={add} padding={padding} count={order.find(o => o.id === item.id)?.count} />;
     return (
         <Container>
-            <Column>{data.slice(0, divide).map(mapFunction)}</Column>
-            {columnCount > 1 && <Column>{data.slice(divide, divide * 2).map(mapFunction)}</Column>}
-            {columnCount > 2 && <Column>{data.slice(divide * 2, divide * 3).map(mapFunction)}</Column>}
-            {columnCount > 2 && <Column>{data.slice(divide * 3).map(mapFunction)}</Column>}
+            {Array(columnCount).fill().map((e, i) => <Column key={i} width={100 / columnCount}>{data.slice(divide * i, divide * (i + 1)).map(mapFunction)}</Column>)}
         </Container>
     );
 };

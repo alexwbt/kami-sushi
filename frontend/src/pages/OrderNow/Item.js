@@ -2,11 +2,15 @@ import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
 const ItemWrapper = styled.div`
-    padding: 5px;
+    padding: ${props => props.padding}px;
+    :hover {
+        padding: 0;
+    }
 `;
 
 const ItemComponent = styled.div`
-    border-radius: 10px;
+    position: relative;
+    border-radius: ${props => props.padding}px;
     background-color: ${props => props.theme.dark};
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
     animation: fadeIn 0.2s linear;
@@ -14,9 +18,15 @@ const ItemComponent = styled.div`
         from { opacity: 0; }
         to { opacity: 1; }
     }
+
+    :hover {
+        border: ${props => props.padding}px solid white;
+    }
+    cursor: pointer;
 `;
 
 const ItemImage = styled.img`
+    display: block;
     border-radius: 10px 10px 0 0;
     width: 100%;
 `;
@@ -38,7 +48,7 @@ const ItemPrice = styled.div`
     color: ${props => props.theme.currency};
     font-size: 20px;
     @media (max-width: 900px) {
-        font-size: 12px;
+        font-size: 14px;
     }
 `;
 
@@ -46,44 +56,60 @@ const ItemDescription = styled.div`
     font-size: 18px;
     color: ${props => props.theme.secondaryText};
     @media (max-width: 900px) {
-        font-size: 11px;
+        font-size: 13px;
     }
 `;
 
-const Button = styled.button`
-    display: inline-block;
-    padding: 3px 10px;
-    margin: 10px 10px 0 0;
-    font-family: inherit;
-    font-size: 18px;
-    color: inherit;
-    background-color: ${props => props.bg};
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-
-    :focus {
-        outline: none;
-    }
-    @media (max-width: 900px) {
-        font-size: 11px;
-    }
+const Counter = styled.div`
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+    border-radius: 20px;
+    background-color: ${props => props.theme.green};
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    font-family: Arial;
 `;
 
-const Item = ({ item, add, count }) => {
+// const Button = styled.button`
+//     display: inline-block;
+//     padding: 3px 10px;
+//     margin: 10px 10px 0 0;
+//     font-family: inherit;
+//     font-size: 18px;
+//     color: inherit;
+//     background-color: ${props => props.bg};
+//     border-radius: 10px;
+//     border: none;
+//     cursor: pointer;
+
+//     :focus {
+//         outline: none;
+//     }
+//     @media (max-width: 900px) {
+//         font-size: 11px;
+//     }
+// `;
+
+const Item = ({ item, add, count, padding }) => {
     const addToOrder = useCallback(() => add(item, 1), [add, item]);
-    const subtractOrder = useCallback(() => add(item, -1), [add, item]);
+    // const subtractOrder = useCallback(() => add(item, -1), [add, item]);
 
     return (
-        <ItemWrapper>
-            <ItemComponent>
+        <ItemWrapper padding={padding}>
+            <ItemComponent onClick={addToOrder} padding={padding}>
                 <ItemImage src={item.item_image} />
                 <ItemDetail>
                     <ItemName>{item.item_name}</ItemName>
                     <ItemPrice>{`€${item.price}`.replace(/\./g, ',')}</ItemPrice>
                     <ItemDescription>{item.item_description}</ItemDescription>
-                    <Button bg='#55bb55' onClick={addToOrder}>zur Bestellung hinzufügen{count > 0 && ` (${count})`}</Button>
-                    {count > 0 && <Button bg='#cc5555' onClick={subtractOrder}>entfernen einen</Button>}
+                    {count > 0 && <Counter>{count}</Counter>}
+                    {/* <Button bg='#55bb55' onClick={addToOrder}>zur Bestellung hinzufügen{count > 0 && ` (${count})`}</Button>
+                    {count > 0 && <Button bg='#cc5555' onClick={subtractOrder}>entfernen einen</Button>} */}
                 </ItemDetail>
             </ItemComponent>
         </ItemWrapper>

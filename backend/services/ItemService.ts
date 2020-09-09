@@ -1,8 +1,8 @@
 import { knex } from ".";
 import { MenuItem, MENU_ITEM } from "../tables";
 
-export const getItem = async (id: number) => {
-    return await knex<MenuItem>(MENU_ITEM).where({ id });
+export const getAllItem = async () => {
+    return await knex<MenuItem>(MENU_ITEM);
 };
 
 export const createItem = async (item: MenuItem) => {

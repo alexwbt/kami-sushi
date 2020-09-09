@@ -19,7 +19,8 @@ const styledTheme = {
     secondaryGrey: '#333333',
     secondaryText: 'grey',
     currency: 'silver',
-    currencyDark: '#707070'
+    currencyDark: '#707070',
+    green: '#55bb55'
 };
 
 const App = () => {

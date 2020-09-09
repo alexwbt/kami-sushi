@@ -51,12 +51,12 @@ export const verify = (token: string): Promise<{ username: string }> => {
 export default () => {
     passport.use(new passportJWT.Strategy({
         secretOrKey: JWT_SECRET,
-        jwtFromRequest: passportJWT.ExtractJwt.fromAuthHeaderAsBearerToken()
+        jwtFromRequest: req => req && req.signedCookies && req.signedCookies["AdminToken"]
     }, async (payload: { id: number }, done) => {
         try {
             const user = await getUser(payload.id);
             if (user) return done(null, user);
-            return done(null, false, { message: "User Not Verified" });
+            return done(null, false, { message: "Non-registered User" });
         } catch (err) {
             return done(err, false);
         }

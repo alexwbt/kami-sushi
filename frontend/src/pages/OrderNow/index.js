@@ -7,6 +7,10 @@ import Cart from './Cart';
 const fakeMenuData = [
     {
         name: 'Vorspeisen',
+        min_column: 2,
+        max_column: 4,
+        padding: 5,
+        banner: '/static/media/generic.caa7a501.jpg',
         items: [
             {
                 id: 0,
@@ -68,19 +72,50 @@ const fakeMenuData = [
     },
     {
         name: 'Hosomaki',
+        min_column: 1,
+        max_column: 1,
+        padding: 1,
         items: [
             {
-                id: 6,
-                item_name: 'item_7',
+                id: 8,
+                item_name: 'item_9',
                 item_description: 'description of this item bla bla bla',
-                item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/14/1f/c3/e5/20180813-210209-largejpg.jpg',
+                item_image: '',
                 price: 100.2
             },
             {
-                id: 7,
-                item_name: 'item_8',
+                id: 9,
+                item_name: 'item_10',
                 item_description: 'description of this item bla bla bla',
-                item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
+                item_image: '',
+                price: 100.2
+            },
+            {
+                id: 10,
+                item_name: 'item_11',
+                item_description: 'description of this item bla bla bla',
+                item_image: '',
+                price: 100.2
+            },
+            {
+                id: 11,
+                item_name: 'item_12 121212',
+                item_description: 'description of this item bla bla bla',
+                item_image: '',
+                price: 100.2
+            },
+            {
+                id: 12,
+                item_name: 'item_13 131313',
+                item_description: 'description of this item bla bla bla',
+                item_image: '',
+                price: 100.2
+            },
+            {
+                id: 13,
+                item_name: 'item_14',
+                item_description: 'description of this item bla bla bla',
+                item_image: '',
                 price: 100.2
             },
         ]
@@ -108,6 +143,11 @@ const Menus = styled.div`
     text-align: center;
     white-space: nowrap;
     overflow: auto;
+
+    @media (max-width: 600px) {
+        font-size: 15px;
+        padding: 5px 10px;
+    }
 `;
 
 const MenuLink = styled.div`
@@ -128,6 +168,14 @@ const LoadingContainer = styled.div`
     text-align: center;
     height: 95vh;
     padding-top: 20vh;
+`;
+
+const Banner = styled.img`
+    display: block;
+    object-fit: cover;
+    width: 100%;
+    min-height: 200px;
+    max-height: 400px;
 `;
 
 const Menu = ({ data, i, setMenu, menu }) => {
@@ -183,19 +231,20 @@ const OrderNow = () => {
                 if (oldItem.id === item.id) {
                     added = true;
                     const newCount = oldItem.count + count;
-                    if (newCount > 0) newOrder.push({ ...item, count: newCount });
+                    if (newCount > 0) newOrder.push({ ...item, count: Math.min(newCount, 99) });
                 } else newOrder.push({ ...oldItem });
             }
             if (!added && count > 0) {
-                newOrder.push({ ...item, count });
+                newOrder.push({ ...item, count: Math.min(count, 99) });
             }
             return newOrder;
         });
     }, []);
 
-    if (data && menu >= 0) return <>
+    if (data) return <>
+        {data[menu].banner && <Banner src={data[menu].banner} />}
         <Menus>{data.map((data, i) => <Menu key={i} {...{ data, i, setMenu, menu }} />)}</Menus>
-        <List add={addToOrder} data={data[menu].items} order={order} />
+        <List add={addToOrder} data={data[menu].items} {...data[menu]} order={order} />
         <Cart order={order} add={addToOrder} />
     </>;
     return <LoadingContainer><Loading /></LoadingContainer>;

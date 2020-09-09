@@ -21,23 +21,30 @@ const Name = styled.span`
 `;
 
 const Price = styled.span`
-    padding-left: 3px;
-    color: ${props => props.theme.currencyDark};
+    padding: 0 3px;
+    font-size: 15px;
+    color: ${props => props.theme.currency};
+    font-family: Arial;
+    line-height: 22px;
 `;
 
 const Count = styled.span`
     text-align: center;
 `;
 
-const Display = styled.input.attrs({
-    type: 'number'
-})`
-    vertical-align: middle;
+const Display = styled.input`
+    vertical-align: top;
     display: inline-block;
     border: none;
     text-align: center;
     padding: 0;
-    width: 25px;
+    width: 20px;
+    margin: 3px 0;
+    ::-webkit-outer-spin-button,
+    ::-webkit-inner-spin-button {
+        appearance: none;
+        margin:  0;
+    }
 `;
 
 const CountButton = styled.div`
@@ -47,7 +54,7 @@ const CountButton = styled.div`
     border-radius: 20px;
     border: 1px solid grey;
     color: grey;
-    vertical-align: middle;
+    vertical-align: top;
     text-align: center;
     line-height: 20px;
     margin: 0 5px;
@@ -90,9 +97,9 @@ const CartItem = ({ item, add }) => {
     const subtractOrder = useCallback(() => add(item, -1), [add, item]);
     const clear = useCallback(() => add(item, -item.count), [add, item]);
     const onChange = useCallback((e) => {
-        const value = +e.target.value;
-        if (value > 0 && value < 1000)
-            add(item, value - item.count);
+        const value = +e.target.value.replace(/[^0-9]/g,'');
+        if (value > 0) add(item, value - item.count);
+        else if (item.count > 1) add(item, -1);
     }, [add, item]);
     return (
         <Wrapper>
