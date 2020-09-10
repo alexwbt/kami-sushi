@@ -1,18 +1,18 @@
 import { knex } from ".";
-import { MenuItem, MENU_ITEM } from "../tables";
+import { MenuItem, ITEM } from "../tables";
 
 export const getAllItem = async () => {
-    return await knex<MenuItem>(MENU_ITEM);
+    return await knex<MenuItem>(ITEM);
 };
 
 export const createItem = async (item: MenuItem) => {
-    await knex(MENU_ITEM).insert(item);
+    await knex(ITEM).insert(item);
 };
 
 export const editItem = async (item: MenuItem) => {
-    await knex(MENU_ITEM).where("id", item.id).update(item);
+    await knex(ITEM).where("id", item.id).update(item);
 };
 
 export const deleteItem = async (id: number) => {
-    await knex(MENU_ITEM).where({ id }).del();
+    await knex(ITEM).where({ id }).del();
 };

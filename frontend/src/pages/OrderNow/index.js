@@ -11,61 +11,62 @@ const fakeMenuData = [
         max_column: 4,
         padding: 5,
         banner: '/static/media/generic.caa7a501.jpg',
+        direction: false,
         items: [
             {
                 id: 0,
-                item_name: 'item_1_TESTsitem_1_ TESTsitem_1_TESTsitem_1_ TESTs',
-                item_description: 'description of this item bla bla bla',
-                item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
+                name: 'item_1_TESTsitem_1_ TESTsitem_1_TESTsitem_1_ TESTs',
+                description: 'description of this item bla bla bla',
+                image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
                 price: 100.23
             },
             {
                 id: 1,
-                item_name: 'item_2',
-                item_description: 'description of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bla',
-                item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
+                name: 'item_2',
+                description: 'description of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bla',
+                image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
                 price: 5.12
             },
             {
                 id: 2,
-                item_name: 'item_3',
-                item_description: 'description of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bla',
-                item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
+                name: 'item_3',
+                description: 'description of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bla',
+                image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
                 price: 100.2
             },
             {
                 id: 3,
-                item_name: 'item_4',
-                item_description: 'description of this item bla bla bla',
-                item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
+                name: 'item_4',
+                description: 'description of this item bla bla bla',
+                image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
                 price: 100.2
             },
             {
                 id: 4,
-                item_name: 'item_5',
-                item_description: 'description of this item bla bla bla',
-                item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
+                name: 'item_5',
+                description: 'description of this item bla bla bla',
+                image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
                 price: 100.2
             },
             {
                 id: 5,
-                item_name: 'item_6',
-                item_description: 'description of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bla',
-                item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/f4/tori-karaage.jpg',
+                name: 'item_6',
+                description: 'description of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bla',
+                image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/f4/tori-karaage.jpg',
                 price: 100.2
             },
             {
                 id: 6,
-                item_name: 'item_7',
-                item_description: 'description of this item bla bla bla',
-                item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/14/1f/c3/e5/20180813-210209-largejpg.jpg',
+                name: 'item_7',
+                description: 'description of this item bla bla bla',
+                image: 'https://media-cdn.tripadvisor.com/media/photo-o/14/1f/c3/e5/20180813-210209-largejpg.jpg',
                 price: 100.2
             },
             {
                 id: 7,
-                item_name: 'item_8',
-                item_description: 'description of this item bla bla bla',
-                item_image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
+                name: 'item_8',
+                description: 'description of this item bla bla bla',
+                image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
                 price: 100.2
             },
         ]
@@ -75,47 +76,132 @@ const fakeMenuData = [
         min_column: 1,
         max_column: 1,
         padding: 1,
+        direction: true,
         items: [
             {
                 id: 8,
-                item_name: 'item_9',
-                item_description: 'description of this item bla bla bla',
-                item_image: '',
+                name: 'item_9',
+                description: 'description of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bla',
+                image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
                 price: 100.2
             },
             {
                 id: 9,
-                item_name: 'item_10',
-                item_description: 'description of this item bla bla bla',
-                item_image: '',
+                name: 'item_10',
+                description: 'description of this item bla bla bla',
+                image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
                 price: 100.2
             },
             {
                 id: 10,
-                item_name: 'item_11',
-                item_description: 'description of this item bla bla bla',
-                item_image: '',
+                name: 'item_11',
+                description: '',
+                image: '',
                 price: 100.2
             },
             {
                 id: 11,
-                item_name: 'item_12 121212',
-                item_description: 'description of this item bla bla bla',
-                item_image: '',
+                name: 'item_12 121212',
+                description: 'description of this item bla bla bla',
+                image: '',
                 price: 100.2
             },
             {
                 id: 12,
-                item_name: 'item_13 131313',
-                item_description: 'description of this item bla bla bla',
-                item_image: '',
+                name: 'item_13 131313',
+                description: 'description of this item bla bla bla',
+                image: '',
                 price: 100.2
             },
             {
                 id: 13,
-                item_name: 'item_14',
-                item_description: 'description of this item bla bla bla',
-                item_image: '',
+                name: 'item_14',
+                description: 'description of this item bla bla bla',
+                image: '',
+                price: 100.2
+            },
+            {
+                id: 14,
+                name: 'item_11',
+                description: 'description of this item bla bla bla',
+                image: '',
+                price: 100.2
+            },
+            {
+                id: 15,
+                name: 'item_12 121212',
+                description: 'description of this item bla bla bla',
+                image: '',
+                price: 100.2
+            },
+            {
+                id: 16,
+                name: 'item_13 131313',
+                description: 'description of this item bla bla bla',
+                image: '',
+                price: 100.2
+            },
+            {
+                id: 17,
+                name: 'item_14',
+                description: 'description of this item bla bla bla',
+                image: '',
+                price: 100.2
+            },
+            {
+                id: 18,
+                name: 'item_11',
+                description: 'description of this item bla bla bla',
+                image: '',
+                price: 100.2
+            },
+            {
+                id: 19,
+                name: 'item_12 121212',
+                description: 'description of this item bla bla bla',
+                image: '',
+                price: 100.2
+            },
+            {
+                id: 20,
+                name: 'item_13 131313',
+                description: 'description of this item bla bla bla',
+                image: '',
+                price: 100.2
+            },
+            {
+                id: 21,
+                name: 'item_14',
+                description: 'description of this item bla bla bla',
+                image: '',
+                price: 100.2
+            },
+            {
+                id: 22,
+                name: 'item_11',
+                description: 'description of this item bla bla bla',
+                image: '',
+                price: 100.2
+            },
+            {
+                id: 23,
+                name: 'item_12 121212',
+                description: 'description of this item bla bla bla',
+                image: '',
+                price: 100.2
+            },
+            {
+                id: 24,
+                name: 'item_13 131313',
+                description: 'description of this item bla bla bla',
+                image: '',
+                price: 100.2
+            },
+            {
+                id: 25,
+                name: 'item_14',
+                description: 'description of this item bla bla bla',
+                image: '',
                 price: 100.2
             },
         ]
@@ -178,6 +264,20 @@ const Banner = styled.img`
     max-height: 400px;
 `;
 
+const Container = styled.div`
+    user-select: none;
+    
+    @media (min-width: 1200px) {
+        display: flex;
+    }
+`;
+
+const Left = styled.div`
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+`;
+
 const Menu = ({ data, i, setMenu, menu }) => {
     const selectMenu = useCallback(() => setMenu(i), [i, setMenu]);
     return <MenuLink key={i} selected={menu === i} onClick={selectMenu}>{data.name}</MenuLink>
@@ -186,7 +286,7 @@ const Menu = ({ data, i, setMenu, menu }) => {
 const OrderNow = () => {
     useEffect(() => {
         document.title = 'KAMI SUSHI - Jetzt bestellen';
-        return () => document.title = 'KAMI SUSHI asdasd';
+        return () => document.title = 'KAMI SUSHI';
     }, []);
 
     const [order, setOrder] = useState(null);
@@ -241,13 +341,21 @@ const OrderNow = () => {
         });
     }, []);
 
-    if (data) return <>
-        {data[menu].banner && <Banner src={data[menu].banner} />}
-        <Menus>{data.map((data, i) => <Menu key={i} {...{ data, i, setMenu, menu }} />)}</Menus>
-        <List add={addToOrder} data={data[menu].items} {...data[menu]} order={order} />
-        <Cart order={order} add={addToOrder} />
-    </>;
-    return <LoadingContainer><Loading /></LoadingContainer>;
+    if (data) return (
+        <Container>
+            <Left>
+                {data[menu].banner && <Banner src={data[menu].banner} />}
+                <Menus>{data.map((data, i) => <Menu key={i} {...{ data, i, setMenu, menu }} />)}</Menus>
+                <List add={addToOrder} data={data[menu].items} {...data[menu]} order={order} />
+            </Left>
+            <Cart order={order} add={addToOrder} />
+        </Container>
+    );
+    return (
+        <LoadingContainer>
+            <Loading />
+        </LoadingContainer>
+    );
 };
 
 export default OrderNow;

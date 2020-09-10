@@ -11,12 +11,12 @@ import handleSocket from "./socket";
 import { loggerMiddleware } from "./utils/logger";
 import passport from "./utils/passport";
 
-const { PORT, JWT_SECRET, CORS_ORIGIN } = process.env;
+const { PORT, COOKIE_SECRET, CORS_ORIGIN } = process.env;
 
 const app = express();
 app.use(cors({ origin: CORS_ORIGIN, credentials: true }));
 app.use(bodyParser.json());
-app.use(cookieParser(JWT_SECRET));
+app.use(cookieParser(COOKIE_SECRET));
 app.use(loggerMiddleware);
 app.use("/menu", menuRouter);
 app.use("/item", itemRouter);

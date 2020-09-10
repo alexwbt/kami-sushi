@@ -1,11 +1,22 @@
+import { NextFunction, Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
 import * as passport from "passport";
 import * as passportJWT from "passport-jwt";
 import { getUser } from "../services/AuthService";
+import Logger from "./logger";
 
 const { JWT_SECRET, JWT_VERIFY_SECRET } = process.env;
 
-export const isLoggedIn = passport.authenticate('jwt', { session: false });
+export const isLoggedIn = async (req: Request, res: Response, next: NextFunction) => {
+    passport.authenticate('jwt', { session: false }, (error, user, info) => {
+        if (!user) res.status(401).json({ success: false, message: "Unauthorized" });
+        else {
+            Logger.info(`Admin Action: ${user.username} ${req.method} ${req.originalUrl}`);
+            req.user = user;
+            next();
+        }
+    })(req, res, next);
+};
 
 export const getLoginToken = (id: number): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -55,8 +66,8 @@ export default () => {
     }, async (payload: { id: number }, done) => {
         try {
             const user = await getUser(payload.id);
-            if (user) return done(null, user);
-            return done(null, false, { message: "Non-registered User" });
+            if (!user) throw null;
+            return done(null, user);
         } catch (err) {
             return done(err, false);
         }

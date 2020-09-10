@@ -2,7 +2,9 @@ import { api } from 'services';
 
 export const isLoggedIn = async () => {
     const res = await api('/auth');
-    return res.status === 200 && res.success;
+    if (res.status === 200 && res.success && res.user)
+        return res.user.username;
+    return false;
 };
 
 export const submitUsername = async username => {

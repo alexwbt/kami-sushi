@@ -3,14 +3,21 @@ import styled from 'styled-components';
 import Item from './Item';
 
 const Container = styled.div`
+    flex: 1;
     position: relative;
     background-color: ${props => props.theme.grey};
     color: white;
-    padding: 10px;
-    flex: 1;
+
+    @media (min-width: 1200px) {
+        padding: 0 5vw;
+    }
 
     @media (min-width: 1500px) {
-        padding: 10px 10vw;
+        padding: 0 15vw;
+    }
+
+    @media (min-width: 1800px) {
+        padding: 0 20vw;
     }
 `;
 
@@ -21,12 +28,8 @@ const Column = styled.div`
     width: ${props => props.width}%;
 `;
 
-const List = ({ add, data, order, min_column = 2, max_column = 4, padding, direction }) => {
+const List = ({ add, data, min_column = 2, max_column = 4, padding }) => {
     const [columnCount, setCount] = useState(1);
-    const [mount, setMount] = useState(true);
-
-    useEffect(() => { setMount(false) }, [data]);
-    useEffect(() => { if (!mount) setMount(true) }, [mount]);
 
     useEffect(() => {
         const resize = () => {
@@ -40,9 +43,8 @@ const List = ({ add, data, order, min_column = 2, max_column = 4, padding, direc
         return () => window.removeEventListener('resize', resize);
     }, [min_column, max_column]);
 
-    if (!mount || order === null) return null;
     const divide = Math.ceil(data.length / columnCount);
-    const mapFunction = (item, i) => <Item key={i} item={item} add={add} padding={padding} direction={direction} count={order.find(o => o.id === item.id)?.count} />;
+    const mapFunction = (item, i) => <Item key={i} item={item} add={add} padding={padding} />;
     return (
         <Container>
             {Array(columnCount).fill().map((e, i) => <Column key={i} width={100 / columnCount}>{data.slice(divide * i, divide * (i + 1)).map(mapFunction)}</Column>)}

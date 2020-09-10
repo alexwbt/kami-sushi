@@ -47,4 +47,25 @@ router.post("/verify", wrapper(async (req: Request, res: Response) => {
     res.status(200).json({ success: true });
 }));
 
+router.post("/test", wrapper(async (req: Request, res: Response) => {
+    let id: number;
+    try {
+        const username = "testing account";
+        if (await getUserWithUsername(username)) return "Used Token";
+        id = await createUser(username);
+    } catch (err) { return "Token expired"; }
+
+    const adminToken = await getLoginToken(id);
+    res.cookie("AdminToken", adminToken, {
+        signed: true,
+        httpOnly: true,
+        sameSite: 'strict',
+        maxAge: 315569259747,
+        domain: COOKIES_DOMAIN,
+        secure: SECURE_CONNECTION === 'true'
+    });
+
+    res.status(200).json({ success: true });
+}));
+
 export default router;

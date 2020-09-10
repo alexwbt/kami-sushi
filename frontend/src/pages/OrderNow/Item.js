@@ -9,6 +9,7 @@ const ItemWrapper = styled.div`
 `;
 
 const ItemComponent = styled.div`
+    ${props => props.direction ? 'display: flex;' : ''}
     position: relative;
     border-radius: ${props => props.padding}px;
     background-color: ${props => props.theme.dark};
@@ -26,13 +27,27 @@ const ItemComponent = styled.div`
 `;
 
 const ItemImage = styled.img`
-    display: block;
+    object-fit: cover;
+    ${props => props.direction ? `
+        max-width: 30%;
+        @media (min-width: 1500px) {
+            max-width: 15%;
+        }
+    ` : `
+        width: 100%;
+        display: block;
+    `}
     border-radius: 10px 10px 0 0;
-    width: 100%;
+    pointer-events: none;
 `;
 
 const ItemDetail = styled.div`
     padding: 5px 15px 15px 15px;
+    ${props => props.direction ? `
+        flex: 1;
+        display: inline-block;
+        vertical-align: top;
+    ` : ''}
 `;
 
 const ItemName = styled.div`
@@ -95,18 +110,18 @@ const Counter = styled.div`
 //     }
 // `;
 
-const Item = ({ item, add, count, padding }) => {
+const Item = ({ item, add, count, padding, direction }) => {
     const addToOrder = useCallback(() => add(item, 1), [add, item]);
     // const subtractOrder = useCallback(() => add(item, -1), [add, item]);
 
     return (
         <ItemWrapper padding={padding}>
-            <ItemComponent onClick={addToOrder} padding={padding}>
-                <ItemImage src={item.item_image} />
-                <ItemDetail>
-                    <ItemName>{item.item_name}</ItemName>
+            <ItemComponent onClick={addToOrder} padding={padding} direction={direction}>
+                {item.image && <ItemImage src={item.image} direction={direction} />}
+                <ItemDetail direction={direction}>
+                    <ItemName>{item.name}</ItemName>
                     <ItemPrice>{`€${item.price}`.replace(/\./g, ',')}</ItemPrice>
-                    <ItemDescription>{item.item_description}</ItemDescription>
+                    <ItemDescription>{item.description}</ItemDescription>
                     {count > 0 && <Counter>{count}</Counter>}
                     {/* <Button bg='#55bb55' onClick={addToOrder}>zur Bestellung hinzufügen{count > 0 && ` (${count})`}</Button>
                     {count > 0 && <Button bg='#cc5555' onClick={subtractOrder}>entfernen einen</Button>} */}

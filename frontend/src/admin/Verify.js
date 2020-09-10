@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { submitToken, submitUsername } from 'services/admin';
 import styled from 'styled-components';
-import Loading from 'components/Loading';
 
 const Container = styled.div`
     min-height: 100vh;
@@ -61,25 +60,10 @@ const ErrorMessage = styled.div`
     color: ${props => props.theme.red};
 `;
 
-const LoadingContainer = styled.div`
-    background-color: black;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    text-align: center;
-
-    ${Loading} {
-        top: 45vh;
-    }
-`;
-
-const Verify = ({ setHasToken, load }) => {
-    const [sentToken, setSentToken] = useState(false);
+const Verify = ({ setHasToken, setLoading }) => {
+    const [sentName, setSentName] = useState(false);
     const [input, setInput] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const [loading, setLoading] = useState(false);
 
     const submitName = useCallback(() => {
         (async () => {
@@ -88,9 +72,9 @@ const Verify = ({ setHasToken, load }) => {
             setLoading(false);
             setInput('');
             setErrorMessage(res.message);
-            setSentToken(res.status === 200 && res.success);
+            setSentName(res.status === 200 && res.success);
         })();
-    }, [input]);
+    }, [input, setLoading]);
 
     const submitVerifyToken = useCallback(() => {
         (async () => {
@@ -101,17 +85,15 @@ const Verify = ({ setHasToken, load }) => {
             setErrorMessage(res.message);
             setHasToken(res.status === 200 && res.success);
         })();
-    }, [input, setHasToken]);
+    }, [input, setHasToken, setLoading]);
 
     const onInput = useCallback(e => {
         setInput(e.target.value);
     }, []);
 
     const toTokenInput = useCallback(() => {
-        setSentToken(true);
+        setSentName(true);
     }, []);
-
-    if (loading || load) return <LoadingContainer><Loading /></LoadingContainer>;
 
     const EnterToken = <>
         <PanelText>
@@ -138,7 +120,7 @@ const Verify = ({ setHasToken, load }) => {
 
     return (
         <Container>
-            <Panel>{sentToken ? EnterToken : EnterUsername}</Panel>
+            <Panel>{sentName ? EnterToken : EnterUsername}</Panel>
         </Container>
     );
 };

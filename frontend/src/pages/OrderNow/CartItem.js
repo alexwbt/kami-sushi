@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
     font-size: 20px;
     padding: 10px 0;
-    margin: 0 30px;
+    margin: 0 10px 0 20px;
     display: flex;
     min-width: 300px;
     border-bottom: 1px dashed #ccc;
@@ -104,7 +104,7 @@ const CartItem = ({ item, add }) => {
     return (
         <Wrapper>
             <DeleteButton onClick={clear} />
-            <Name>{item.item_name}</Name>
+            <Name>{item.name}</Name>
             <Price>{`€${Math.round(item.price * item.count * 100) / 100}`.replace(/\./g, ',')}</Price>
             <Count>
                 <CountButton onClick={subtractOrder}>-</CountButton>
