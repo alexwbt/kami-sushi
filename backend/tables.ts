@@ -69,10 +69,12 @@ const tables: TableList = [
                 max_column: 4,
                 padding: 5,
                 banner: "",
+                direction: false,
                 ...data
             };
             if (typeof d.name !== "string") return "Invalid menu name";
             if (typeof d.banner !== "string") return "Invalid banner path";
+            if (typeof d.direction !== "boolean") return "Invalid direction";
             if (d.min_column > d.max_column) return "Invalid columns";
             return true;
         }

@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import List from './List';
+import MenuForm from './MenuForm';
 
 const Menus = styled.div`
     position: sticky;
@@ -47,6 +48,13 @@ const Container = styled.div`
     flex-direction: column;
 `;
 
+const Empty = styled.div`
+    font-size: 30px;
+    padding: 30px;
+    text-align: center;
+    flex: 1;
+`;
+
 const Menu = ({ data, i, setMenu, menu }) => {
     const selectMenu = useCallback(() => setMenu(i), [i, setMenu]);
     return <MenuLink key={i} selected={menu === i} onClick={selectMenu}>{data.name}</MenuLink>
@@ -55,8 +63,14 @@ const Menu = ({ data, i, setMenu, menu }) => {
 const ManageMenu = ({ menus, items }) => {
     const [menu, setMenu] = useState(0);
 
-    const editItem = useCallback(() => {}, []);
+    const editItem = useCallback(() => { }, []);
 
+    if (menus.length === 0) return (
+        <>
+            <Empty>No menu...</Empty>
+            <MenuForm />
+        </>
+    );
     return menus && items && (
         <Container>
             {menus[menu].banner && <Banner src={menus[menu].banner} />}

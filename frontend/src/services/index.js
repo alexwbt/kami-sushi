@@ -1,12 +1,16 @@
 
 export const api = async (url, options = {}) => {
-    const res = await fetch(process.env.REACT_APP_API_SERVER + url, {
-        ...options,
-        headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-            ...options.headers
-        },
-        credentials: 'include'
-    });
-    return { status: res.status, ...await res.json() };
+    try {
+        const res = await fetch(process.env.REACT_APP_API_SERVER + url, {
+            ...options,
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                ...options.headers
+            },
+            credentials: 'include'
+        });
+        return { status: res.status, ...await res.json() };
+    } catch (err) {
+        return err;
+    }
 };
