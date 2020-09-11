@@ -2,6 +2,8 @@ import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import List from './List';
 import MenuForm from './MenuForm';
+import { api } from 'services';
+import { useEffect } from 'react';
 
 const Menus = styled.div`
     position: sticky;
@@ -55,28 +57,74 @@ const Empty = styled.div`
     flex: 1;
 `;
 
+const Button = styled.div`
+    display: inline-block;
+    margin: 5px;
+    background-color: grey;
+    font-size: 15px;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    :hover {
+        background-color: black;
+    }
+`;
+
+const CreateButtons = styled.div`
+    background-color: #333;
+    padding: 10px 0;
+`;
+
 const Menu = ({ data, i, setMenu, menu }) => {
     const selectMenu = useCallback(() => setMenu(i), [i, setMenu]);
     return <MenuLink key={i} selected={menu === i} onClick={selectMenu}>{data.name}</MenuLink>
 };
 
-const ManageMenu = ({ menus, items }) => {
+const ManageMenu = () => {
+    const [menus, setMenus] = useState(null);
+    const [items, setItems] = useState(null);
     const [menu, setMenu] = useState(0);
+    const [menuForm, setMenuForm] = useState(false);
 
-    const editItem = useCallback(() => { }, []);
+    const getData = useCallback(async () => {
+        const res = await api('/menu');
+        if (res.status === 200 && res.success) {
+            setMenus(res.menus);
+            setItems(res.items);
+        }
+    }, []);
 
-    if (menus.length === 0) return (
-        <>
-            <Empty>No menu...</Empty>
-            <MenuForm />
-        </>
-    );
+    useEffect(() => { getData(); }, [getData]);
+
+    const toggleMenu = useCallback(() => {
+        setMenuForm(open => !open);
+    }, []);
+
     return menus && items && (
-        <Container>
-            {menus[menu].banner && <Banner src={menus[menu].banner} />}
-            <Menus>{menus.map((data, i) => <Menu key={i} {...{ data, i, setMenu, menu }} />)}</Menus>
-            <List add={editItem} padding={menus[menu].padding} data={items} />
-        </Container>
+        <>
+            {
+                menus.length > 0 && <Container>
+                    {menus[menu].banner && <Banner src={menus[menu].banner} />}
+                    <CreateButtons>
+                        <Button onClick={toggleMenu}>Create Menu</Button>
+                        <Button onClick={toggleMenu}>Create Item</Button>
+                    </CreateButtons>
+                    <Menus>
+                        {menus.map((data, i) => <Menu key={i} {...{ data, i, setMenu, menu }} />)}
+                    </Menus>
+                    <List add={() => { }} padding={menus[menu].padding} data={items} />
+                </Container>
+            }
+            {
+                menus.length === 0 && <Empty>
+                    <div>No menu...</div>
+                    <Button onClick={toggleMenu}>Create Menu</Button>
+                </Empty>
+            }
+            {
+                menuForm && <MenuForm toggleMenu={toggleMenu} getData={getData} />
+            }
+        </>
     );
 };
 

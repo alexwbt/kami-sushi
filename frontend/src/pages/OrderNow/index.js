@@ -9,9 +9,9 @@ const fakeMenuData = [
         name: 'Vorspeisen',
         min_column: 2,
         max_column: 4,
-        padding: 5,
+        padding: 1,
         banner: '/static/media/generic.caa7a501.jpg',
-        direction: false,
+        direction: 0,
         items: [
             {
                 id: 0,
@@ -76,7 +76,7 @@ const fakeMenuData = [
         min_column: 1,
         max_column: 1,
         padding: 1,
-        direction: true,
+        direction: 1,
         items: [
             {
                 id: 8,

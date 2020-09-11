@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { api } from 'services';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import ManageMenu from './ManageMenu';
 
@@ -35,27 +34,14 @@ const User = styled.div`
 `;
 
 const Manage = ({ hasToken }) => {
-    const [menus, setMenus] = useState(null);
-    const [items, setItems] = useState(null);
     const [tab] = useState(0);
-
-    useEffect(() => {
-        (async () => {
-            const res = await api('/menu');
-            if (res.status === 200 && res.success) {
-                setMenus(res.menus);
-                setItems(res.items);
-            }
-        })();
-    }, []);
-
     return (
         <Container>
             <SideBar>
                 <User>Logged in as {hasToken}</User>
                 <SlideBarItem>Online Order Menu</SlideBarItem>
             </SideBar>
-            {tab === 0 && menus && items && <ManageMenu menus={menus} items={items} />}
+            {tab === 0 && <ManageMenu />}
         </Container>
     );
 };

@@ -11,7 +11,7 @@ const ItemWrapper = styled.div`
 const ItemComponent = styled.div`
     ${props => props.direction ? 'display: flex;' : ''}
     position: relative;
-    border-radius: ${props => props.padding}px;
+    border-radius: 2px;
     background-color: ${props => props.theme.dark};
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
     animation: fadeIn 0.2s linear;
@@ -113,7 +113,7 @@ const Counter = styled.div`
 const Item = ({ item, add, count, padding, direction }) => {
     const addToOrder = useCallback(() => add(item, 1), [add, item]);
     // const subtractOrder = useCallback(() => add(item, -1), [add, item]);
-
+    
     return (
         <ItemWrapper padding={padding}>
             <ItemComponent onClick={addToOrder} padding={padding} direction={direction}>

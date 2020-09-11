@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { submitToken, submitUsername } from 'services/admin';
 import styled from 'styled-components';
+import { useEffect } from 'react';
 
 const Container = styled.div`
     min-height: 100vh;
@@ -60,10 +61,14 @@ const ErrorMessage = styled.div`
     color: ${props => props.theme.red};
 `;
 
-const Verify = ({ setHasToken, setLoading }) => {
+const Verify = ({ setHasToken, setLoading, error }) => {
     const [sentName, setSentName] = useState(false);
     const [input, setInput] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+
+    useEffect(() => {
+        setErrorMessage(error);
+    }, [error]);
 
     const submitName = useCallback(() => {
         (async () => {

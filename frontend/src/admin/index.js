@@ -1,6 +1,6 @@
 import Loading from 'components/Loading';
 import React, { useEffect, useState } from 'react';
-import { isLoggedIn } from 'services/admin';
+import { api } from 'services';
 import styled from 'styled-components';
 import Manage from './Manage';
 import Verify from './Verify';
@@ -23,17 +23,20 @@ const LoadingContainer = styled.div`
 const Admin = () => {
     const [hasToken, setHasToken] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         (async () => {
-            setHasToken(await isLoggedIn());
+            const res = await api('/auth');
+            setHasToken(res.status === 200 && res.success && res.user && res.user.username);
+            setError(res.message);
         })();
     }, []);
 
     return (
         <>
             {(hasToken === null || loading) && <LoadingContainer><Loading /></LoadingContainer>}
-            {hasToken ? <Manage hasToken={hasToken} /> : <Verify setHasToken={setHasToken} setLoading={setLoading} />}
+            {hasToken ? <Manage hasToken={hasToken} /> : <Verify setHasToken={setHasToken} setLoading={setLoading} error={error} />}
         </>
     );
 };

@@ -72,7 +72,10 @@ const tables: TableList = [
                 direction: false,
                 ...data
             };
-            if (typeof d.name !== "string") return "Invalid menu name";
+            if (typeof d.name !== "string" || d.name.length <= 0) return "Invalid menu name";
+            if (typeof d.min_column !== "number") return "Invalid columns";
+            if (typeof d.max_column !== "number") return "Invalid columns";
+            if (typeof d.padding !== "number") return "Invalid padding";
             if (typeof d.banner !== "string") return "Invalid banner path";
             if (typeof d.direction !== "boolean") return "Invalid direction";
             if (d.min_column > d.max_column) return "Invalid columns";
@@ -95,8 +98,10 @@ const tables: TableList = [
                 image: "",
                 ...data
             };
-            if (typeof d.name !== "string") return "Invalid item name";
+            if (typeof d.name !== "string" || d.name.length <= 0) return "Invalid item name";
+            if (typeof d.description !== "string") return "Invalid description";
             if (typeof d.image !== "string") return "Invalid image path";
+            if (typeof d.menu_id !== "number" || d.menu_id < 1) return "Invalid menu id";
             return true;
         }
     }

@@ -26,15 +26,14 @@ const ButtonWrapper = styled.div`
 `;
 
 const Container = styled.div`
+    background-color: white;
     flex-direction: column;
     position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: white;
+    display: flex;
     z-index: 2;
-    overscroll-behavior: none;
+    bottom: 0;
+    right: 0;
+    top: 0;
 
     animation: ${props => props.animate} 0.15s linear forwards;
     @keyframes slideUp {
@@ -46,32 +45,47 @@ const Container = styled.div`
         to { transform: translateY(100vh); }
     }
 
+    @media (max-width: 1200px) {
+        left: 0;
+    }
+
     @media (min-width: 1200px) {
-        display: flex;
-        position: relative;
-        min-width: 400px;
+        position: fixed;
+        bottom: 134px;
+        width: 400px;
+        top: 112px;
         flex: 0;
+    }
+`;
+
+const ContainerPadding = styled.div`
+    background-color: #f8f8f8;
+    width: 400px;
+    height: calc(100vh - 134px - 112px);
+
+    @media (max-width: 1200px) {
+        display: none;
     }
 `;
 
 const CloseButton = styled.div`
     position: absolute;
+    opacity: 0.3;
+    height: 30px;
+    width: 30px;
     right: 5px;
     top: 5px;
-    width: 30px;
-    height: 30px;
-    opacity: 0.3;
 
     :hover {
         opacity: 1;
     }
     :before, :after {
-        position: absolute;
-        left: 13px;
-        content: '';
-        height: 30px;
-        width: 2px;
         background-color: #333;
+        position: absolute;
+        height: 30px;
+        content: '';
+        left: 13px;
+        width: 2px;
     }
     :before {
         transform: rotate(45deg);
@@ -86,18 +100,11 @@ const CloseButton = styled.div`
 `;
 
 const Title = styled.div`
-    font-size: 30px;
     text-align: center;
+    margin-top: 10px;
+    font-size: 30px;
     padding: 10px;
     display: flex;
-    margin-top: 10px;
-
-    @media (min-width: 1200px) {
-        background-color: rgba(255, 255, 255, 0.75);
-        position: sticky;
-        z-index: 1;
-        top: 0;
-    }
 
     :before, :after {
         flex: 1;
@@ -110,15 +117,11 @@ const Title = styled.div`
 `;
 
 const Empty = styled.div`
-    margin: 30px;
-    font-size: 30px;
-    text-align: center;
     color: ${props => props.theme.secondaryText};
-
-    @media (min-width: 1200px) {
-        position: sticky;
-        top: 60px;
-    }
+    text-align: center;
+    font-size: 30px;
+    margin: 30px;
+    flex: 1;
 `;
 
 const Items = styled.div`
@@ -127,28 +130,20 @@ const Items = styled.div`
 `;
 
 const Bottom = styled.div`
-    margin: 0 10px;
-    padding-bottom: 10px;
     border-top: 1px solid black;
-
-    @media (min-width: 1200px) {
-        position: sticky;
-        background-color: rgba(255, 255, 255, 0.75);
-        right: 0;
-        bottom: 0;
-        margin-top: auto;
-    }
+    padding-bottom: 10px;
+    margin: 0 10px;
 `;
 
 const Total = styled.div`
+    padding: 5px 0 20px 0;
     font-size: 20px;
     display: flex;
-    padding: 5px 0 20px 0;
 
     span {
-        margin-left: auto;
         color: ${props => props.theme.currencyDark};
         font-family: Arial;
+        margin-left: auto;
     }
 `;
 
@@ -194,6 +189,7 @@ const Cart = ({ order, add }) => {
                 </Bottom>
             </Container>
         }
+        <ContainerPadding />
     </>;
 };
 

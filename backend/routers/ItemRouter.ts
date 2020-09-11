@@ -9,8 +9,6 @@ const router = Router();
 router.post("/", isLoggedIn, wrapper(async (req: Request, res: Response) => {
     const { name, description, image, menu_id } = req.body;
 
-    if (typeof menu_id !== "number" || menu_id < 1) return "Invalid menu id";
-
     const valid = tables[ITEM_I].valid(req.body);
     if (valid !== true) return valid;
 
@@ -23,7 +21,6 @@ router.put("/", isLoggedIn, wrapper(async (req: Request, res: Response) => {
     const { id, name, description, image, menu_id } = req.body;
 
     if (typeof id !== "number" || id < 1) return "Invalid id";
-    if (typeof menu_id !== "number" || menu_id < 1) return "Invalid menu id";
 
     const valid = tables[ITEM_I].valid(req.body);
     if (valid !== true) return valid;
