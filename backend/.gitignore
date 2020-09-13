@@ -8,3 +8,7 @@ node_modules/
 # winston logger
 log/
 *.log
+
+# imgs
+public/*.*
+!.gitkeep

@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react";
 import styled from 'styled-components';
 import CartItem from "./CartItem";
-import { useEffect } from "react";
 
 const Button = styled.div`
     border-radius: 10px;
@@ -17,12 +16,34 @@ const Button = styled.div`
 `;
 
 const ButtonWrapper = styled.div`
-    position: sticky;
     right: 0;
     bottom: 0;
+    position: sticky;
     padding: 7px 20px;
     background-color: ${props => props.theme.grey};
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+
+    ${props => props.small ? `
+        position: fixed;
+        background: none;
+        box-shadow: none;
+
+        animation: ${props.open ? 'buttonSlideLeft' : 'buttonSlideRight'} 0.15s linear forwards;
+        @keyframes buttonSlideLeft {
+            from { transform: 0; }
+            to { transform: translateX(-400px); }
+        }
+        @keyframes buttonSlideRight {
+            from { transform: translateX(-400px); }
+            to { transform: 0; }
+        }
+
+        ${Button} {
+            @media (min-width: 1200px) {
+                box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+            }
+        }
+    ` : ''}
 `;
 
 const Container = styled.div`
@@ -35,36 +56,53 @@ const Container = styled.div`
     right: 0;
     top: 0;
 
-    animation: ${props => props.animate} 0.15s linear forwards;
-    @keyframes slideUp {
-        from { transform: translateY(100vh); }
-        to { transform: 0; }
-    }
-    @keyframes slideDown {
-        from { transform: 0; }
-        to { transform: translateY(100vh); }
-    }
-
     @media (max-width: 1200px) {
         left: 0;
+
+        animation: ${props => props.open ? 'slideUp' : 'slideDown'} 0.15s linear forwards;
+        @keyframes slideUp {
+            from { transform: translateY(100vh); }
+            to { transform: 0; }
+        }
+        @keyframes slideDown {
+            from { transform: 0; }
+            to { transform: translateY(100vh); }
+        }
     }
 
     @media (min-width: 1200px) {
         position: fixed;
-        bottom: 134px;
         width: 400px;
-        top: 112px;
         flex: 0;
+
+        animation: ${props => props.open ? 'slideRight' : 'slideLeft'} 0.15s linear forwards;
+        @keyframes slideLeft {
+            from { width: 400px; }
+            to { width: 0; }
+        }
+        @keyframes slideRight {
+            from { width: 0; }
+            to { width: 400px; }
+        }
     }
 `;
 
 const ContainerPadding = styled.div`
     background-color: #f8f8f8;
     width: 400px;
-    height: calc(100vh - 134px - 112px);
 
     @media (max-width: 1200px) {
         display: none;
+    }
+
+    animation: ${props => props.open ? 'slideRight' : 'slideLeft'} 0.15s linear forwards;
+    @keyframes slideLeft {
+        from { width: 400px; }
+        to { width: 0; }
+    }
+    @keyframes slideRight {
+        from { width: 0; }
+        to { width: 400px; }
     }
 `;
 
@@ -95,8 +133,9 @@ const CloseButton = styled.div`
     }
 
     @media (min-width: 1200px) {
-        display: none;
+        ${props => props.open ? '' : 'display: none;'};
     }
+
 `;
 
 const Title = styled.div`
@@ -148,48 +187,40 @@ const Total = styled.div`
 `;
 
 const Cart = ({ order, add }) => {
-    const [open, setOpen] = useState(null);
+    const [open, setOpen] = useState(window.innerWidth >= 1200 || null);
 
     const toggleCart = useCallback(() => {
-        if (window.innerWidth < 1200) setOpen(open => {
-            document.body.style.overflow = open ? 'auto' : 'hidden';
+        setOpen(open => {
+            document.body.style.overflow = open || window.innerWidth >= 1200 ? 'auto' : 'hidden';
             return !open
         });
     }, []);
 
-    useEffect(() => {
-        const resize = () => {
-            if (window.innerWidth >= 1200)
-                setOpen(true);
-        };
-        resize();
-        window.addEventListener('resize', resize);
-        return () => window.removeEventListener('resize', resize);
-    }, []);
-
     return <>
         {
-            window.innerWidth < 1200 && <ButtonWrapper>
+            <ButtonWrapper small={window.innerWidth >= 1200} open={open}>
                 <Button onClick={toggleCart}>BESTELLLISTE</Button>
             </ButtonWrapper>
         }
         {
-            open !== null && order && <Container animate={open ? 'slideUp' : 'slideDown'}>
-                <CloseButton onClick={toggleCart} />
-                <Title>BESTELLLISTE</Title>
-                {
-                    order.length > 0 ?
-                        <Items>
-                            {order.map((item, i) => <CartItem key={i} item={item} add={add} />)}
-                        </Items> : <Empty>LEER...</Empty>
-                }
-                <Bottom>
-                    <Total>gesamt<span>{`€${order.reduce((total, item) => Math.round((total + item.price * item.count) * 100) / 100, 0)}`.replace(/\./g, ',')}</span></Total>
-                    <Button>BESTELLEN</Button>
-                </Bottom>
-            </Container>
+            open !== null && order && <>
+                <Container open={open}>
+                    <CloseButton onClick={toggleCart} open={open} />
+                    <Title>BESTELLLISTE</Title>
+                    {
+                        order.length > 0 ?
+                            <Items>
+                                {order.map((item, i) => <CartItem key={i} item={item} add={add} />)}
+                            </Items> : <Empty>LEER...</Empty>
+                    }
+                    <Bottom>
+                        <Total>gesamt<span>{`€${order.reduce((total, item) => Math.round((total + item.price * item.count) * 100) / 100, 0)}`.replace(/\./g, ',')}</span></Total>
+                        <Button>BESTELLEN</Button>
+                    </Bottom>
+                </Container>
+                <ContainerPadding open={open} />
+            </>
         }
-        <ContainerPadding />
     </>;
 };
 

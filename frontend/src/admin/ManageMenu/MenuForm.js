@@ -116,32 +116,41 @@ const useInput = defaultValue => {
 
 const MenuForm = ({ data, toggleMenu, getData }) => {
     const [error, setError] = useState('');
-    const [name, setName] = useInput('');
-    const [minCol, setMinCol] = useNumberInput('', 1, 5);
-    const [maxCol, setMaxCol] = useNumberInput('', 1, 5);
-    const [padding, setPadding] = useNumberInput('', 0, 10);
+    const [name, setName] = useInput(data?.name || '');
+    const [minCol, setMinCol] = useNumberInput(data?.min_column || '', 1, 5);
+    const [maxCol, setMaxCol] = useNumberInput(data?.max_column || '', 1, 5);
+    const [padding, setPadding] = useNumberInput(data?.padding || '', 0, 10);
     const [direction, setDirection] = useState(data?.direction);
+    const [banner, setBanner] = useState(null);
 
     const switchDirection = useCallback(() => {
         setDirection(direction => !direction);
     }, []);
 
+    const onImageChange = useCallback(e => {
+        setBanner(e.target.files[0]);
+    }, []);
+
     const submit = useCallback(async () => {
-        const res = await createMenu({
+        setError('');
+        const data = new FormData();
+        data.append('image', banner);
+        data.append('data', JSON.stringify({
             name,
             min_column: +minCol,
             max_column: +maxCol,
             padding: +padding,
-            direction
-        });
+            direction,
+            image: banner
+        }));
+        const res = await createMenu(data);
         if (res.status === 200 && res.success) {
-            setError('');
             toggleMenu(false);
             getData();
         } else {
             setError(res.message);
         }
-    }, [name, minCol, maxCol, padding, direction, toggleMenu, getData]);
+    }, [name, minCol, maxCol, padding, direction, toggleMenu, getData, banner]);
 
     return (
         <Background>
@@ -168,7 +177,7 @@ const MenuForm = ({ data, toggleMenu, getData }) => {
                 </Label>
                 <Label>
                     Banner<br />
-                    <Input type="file" noPadding />
+                    <Input type="file" noPadding onChange={onImageChange} />
                 </Label>
                 <Button margin onClick={submit}>Submit</Button>
                 {error && <Error>{error}</Error>}

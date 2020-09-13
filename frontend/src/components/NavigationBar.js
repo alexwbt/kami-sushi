@@ -1,23 +1,26 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import BrandImg from 'resource/brand.png';
 
 const Bar = styled.div`
-    padding: 30px 15px;
+    padding: 20px 15px;
     text-align: center;
     background-color: ${props => props.theme.dark};
     color: white;
 `;
 
-const Brand = styled.div`
+const Brand = styled.img`
     display: inline-block;
     vertical-align: middle;
     margin: 0 20px;
     font-size: 45px;
     cursor: pointer;
+    height: 72px;
+    object-fit: cover;
 
-    @media (max-width: 1100px) {
-        font-size: 30px;
+    @media (max-width: 500px) {
+        height: 45px;
     }
 `;
 
@@ -49,7 +52,7 @@ const NavigationBar = () => {
         <Bar>
             <Item onClick={home}>Home</Item>
             <Item onClick={menu}>Speisekarte</Item>
-            <Brand onClick={main}>KAMI SUSHI</Brand>
+            <Brand onClick={main} src={BrandImg}></Brand>
             <Item onClick={contact}>Kontakt</Item>
             <Item onClick={imprint}>Impressum</Item>
         </Bar>

@@ -1,25 +1,47 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import Main from 'resource/main.png';
+import HomeImg from 'resource/home.png';
 import styled from 'styled-components';
 
 const Container = styled.div`
     position: relative;
-    height: 90vh;
+    height: calc(100vh - 112px);
+    /* background: linear-gradient(151deg, rgba(105,105,115,1) 0%, rgba(14,19,40,1) 52%, rgba(5,26,45,1) 100%); */
+    background: linear-gradient(151deg, rgba(14,19,36,1) 0%, rgba(0,0,0,1) 100%);
+    overflow: hidden;
+
+    @media (max-width: 500px) {
+        height: calc(100vh - 85px);
+    }
 `;
 
 const Image = styled.img`
     display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%);
+
+    @media (min-width: 500px) {
+        height: 80%;
+    }
+
+    @media (min-width: 1100px) {
+        height: 90%;
+        left: 40%;
+    }
+
+    @media (max-width: 500px) {
+        transform: translate(-50%, -50%);
+        height: 80%;
+    }
 `;
 
 const Panel = styled.div`
     position: absolute;
-    top: 50%;
-    left: 25%;
-    transform: translate(-40%, -75%);
+    top: 40%;
+    left: 40%;
+    transform: translate(-50%, -50%);
     max-width: 40%;
     color: white;
     font-size: 60px;
@@ -32,7 +54,7 @@ const Panel = styled.div`
         padding: 20px;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -75%);
+        transform: translate(-50%, -50%);
         width: 70%;
         max-width: 70%;
     }
@@ -62,8 +84,11 @@ const OrderNow = styled.div`
         color: ${props => props.theme.red};
     }
 
-    @media (max-width: 500px) {
+    @media (max-width: 900px) {
         margin-top: 30px;
+    }
+
+    @media (max-width: 500px) {
         font-size: 20px;
         padding: 10px 20px;
     }
@@ -75,13 +100,13 @@ const OrderNow = styled.div`
     }
 `;
 
-const MainPage = () => {
+const Home = () => {
     const history = useHistory();
     const orderNow = useCallback(() => history.push('/jetzt-bestellen'), [history]);
 
     return (
         <Container>
-            <Image src={Main} />
+            <Image src={HomeImg} />
             <Panel>
                 <div>Sushi-Spezialitäten frisch zubereitet</div>
                 <OrderNow onClick={orderNow}>JETZT BESTELLEN</OrderNow>
@@ -90,4 +115,4 @@ const MainPage = () => {
     );
 };
 
-export default MainPage;
+export default Home;

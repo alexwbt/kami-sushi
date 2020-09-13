@@ -75,8 +75,11 @@ const CreateButtons = styled.div`
     padding: 10px 0;
 `;
 
-const Menu = ({ data, i, setMenu, menu }) => {
-    const selectMenu = useCallback(() => setMenu(i), [i, setMenu]);
+const Menu = ({ data, i, setMenu, menu, editMenu }) => {
+    const selectMenu = useCallback(() => {
+        setMenu(i);
+        if (menu === i) editMenu(data);
+    }, [i, setMenu, editMenu, menu, data]);
     return <MenuLink key={i} selected={menu === i} onClick={selectMenu}>{data.name}</MenuLink>
 };
 
@@ -96,9 +99,8 @@ const ManageMenu = () => {
 
     useEffect(() => { getData(); }, [getData]);
 
-    const toggleMenu = useCallback(() => {
-        setMenuForm(open => !open);
-    }, []);
+    const toggleMenu = useCallback(() => { setMenuForm(open => !open); }, []);
+    const editMenu = useCallback(data => { setMenuForm(data); }, []);
 
     return menus && items && (
         <>
@@ -110,7 +112,7 @@ const ManageMenu = () => {
                         <Button onClick={toggleMenu}>Create Item</Button>
                     </CreateButtons>
                     <Menus>
-                        {menus.map((data, i) => <Menu key={i} {...{ data, i, setMenu, menu }} />)}
+                        {menus.map((data, i) => <Menu key={i} {...{ data, i, setMenu, menu, editMenu }} />)}
                     </Menus>
                     <List add={() => { }} padding={menus[menu].padding} data={items} />
                 </Container>
@@ -122,7 +124,7 @@ const ManageMenu = () => {
                 </Empty>
             }
             {
-                menuForm && <MenuForm toggleMenu={toggleMenu} getData={getData} />
+                menuForm && <MenuForm toggleMenu={toggleMenu} getData={getData} data={typeof menuForm === 'object' && menuForm} />
             }
         </>
     );

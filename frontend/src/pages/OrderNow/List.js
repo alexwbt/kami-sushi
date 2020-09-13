@@ -4,7 +4,7 @@ import Item from './Item';
 
 const Container = styled.div`
     position: relative;
-    background-color: ${props => props.theme.grey};
+    background-color: ${props => props.theme.darkBlue};
     color: white;
     padding: 10px;
     flex: 1;
