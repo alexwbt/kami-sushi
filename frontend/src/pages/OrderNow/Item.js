@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
+const { REACT_APP_API_SERVER } = process.env;
+
 const ItemWrapper = styled.div`
     padding: ${props => props.padding}px;
     :hover {
@@ -37,7 +39,7 @@ const ItemImage = styled.img`
         width: 100%;
         display: block;
     `}
-    border-radius: 10px 10px 0 0;
+    border-radius: 2px 2px 0 0;
     pointer-events: none;
 `;
 
@@ -90,41 +92,18 @@ const Counter = styled.div`
     font-family: Arial;
 `;
 
-// const Button = styled.button`
-//     display: inline-block;
-//     padding: 3px 10px;
-//     margin: 10px 10px 0 0;
-//     font-family: inherit;
-//     font-size: 18px;
-//     color: inherit;
-//     background-color: ${props => props.bg};
-//     border-radius: 10px;
-//     border: none;
-//     cursor: pointer;
-
-//     :focus {
-//         outline: none;
-//     }
-//     @media (max-width: 900px) {
-//         font-size: 11px;
-//     }
-// `;
-
 const Item = ({ item, add, count, padding, direction }) => {
     const addToOrder = useCallback(() => add(item, 1), [add, item]);
-    // const subtractOrder = useCallback(() => add(item, -1), [add, item]);
     
     return (
         <ItemWrapper padding={padding}>
-            <ItemComponent onClick={addToOrder} padding={padding} direction={direction}>
-                {item.image && <ItemImage src={item.image} direction={direction} />}
-                <ItemDetail direction={direction}>
+            <ItemComponent onClick={addToOrder} padding={padding} direction={+direction}>
+                {item.image && <ItemImage src={`${REACT_APP_API_SERVER}/${item.image}`} direction={+direction} />}
+                <ItemDetail direction={+direction}>
                     <ItemName>{item.name}</ItemName>
                     <ItemPrice>{`€${item.price}`.replace(/\./g, ',')}</ItemPrice>
                     <ItemDescription>{item.description}</ItemDescription>
                     {count > 0 && <Counter>{count}</Counter>}
-                    {/* <Button bg='#55bb55' onClick={addToOrder}>zur Bestellung hinzufügen{count > 0 && ` (${count})`}</Button>
-                    {count > 0 && <Button bg='#cc5555' onClick={subtractOrder}>entfernen einen</Button>} */}
                 </ItemDetail>
             </ItemComponent>
         </ItemWrapper>

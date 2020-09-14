@@ -3,221 +3,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import List from './List';
 import Cart from './Cart';
+import { api } from 'services';
 
-const fakeMenuData = [
-    {
-        name: 'Vorspeisen',
-        min_column: 2,
-        max_column: 4,
-        padding: 1,
-        banner: '/static/media/generic.caa7a501.jpg',
-        direction: 0,
-        items: [
-            {
-                id: 0,
-                name: 'item_1_TESTsitem_1_ TESTsitem_1_TESTsitem_1_ TESTs',
-                description: 'description of this item bla bla bla',
-                image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
-                price: 100.23
-            },
-            {
-                id: 1,
-                name: 'item_2',
-                description: 'description of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bla',
-                image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
-                price: 5.12
-            },
-            {
-                id: 2,
-                name: 'item_3',
-                description: 'description of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bla',
-                image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
-                price: 100.2
-            },
-            {
-                id: 3,
-                name: 'item_4',
-                description: 'description of this item bla bla bla',
-                image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
-                price: 100.2
-            },
-            {
-                id: 4,
-                name: 'item_5',
-                description: 'description of this item bla bla bla',
-                image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
-                price: 100.2
-            },
-            {
-                id: 5,
-                name: 'item_6',
-                description: 'description of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bla',
-                image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/f4/tori-karaage.jpg',
-                price: 100.2
-            },
-            {
-                id: 6,
-                name: 'item_7',
-                description: 'description of this item bla bla bla',
-                image: 'https://media-cdn.tripadvisor.com/media/photo-o/14/1f/c3/e5/20180813-210209-largejpg.jpg',
-                price: 100.2
-            },
-            {
-                id: 7,
-                name: 'item_8',
-                description: 'description of this item bla bla bla',
-                image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
-                price: 100.2
-            },
-        ]
-    },
-    {
-        name: 'Hosomaki',
-        min_column: 1,
-        max_column: 1,
-        padding: 1,
-        direction: 1,
-        items: [
-            {
-                id: 8,
-                name: 'item_9',
-                description: 'description of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bladescription of this item bla bla bla',
-                image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
-                price: 100.2
-            },
-            {
-                id: 9,
-                name: 'item_10',
-                description: 'description of this item bla bla bla',
-                image: 'https://media-cdn.tripadvisor.com/media/photo-o/17/5b/c8/d0/shinsen.jpg',
-                price: 100.2
-            },
-            {
-                id: 10,
-                name: 'item_11',
-                description: '',
-                image: '',
-                price: 100.2
-            },
-            {
-                id: 11,
-                name: 'item_12 121212',
-                description: 'description of this item bla bla bla',
-                image: '',
-                price: 100.2
-            },
-            {
-                id: 12,
-                name: 'item_13 131313',
-                description: 'description of this item bla bla bla',
-                image: '',
-                price: 100.2
-            },
-            {
-                id: 13,
-                name: 'item_14',
-                description: 'description of this item bla bla bla',
-                image: '',
-                price: 100.2
-            },
-            {
-                id: 14,
-                name: 'item_11',
-                description: 'description of this item bla bla bla',
-                image: '',
-                price: 100.2
-            },
-            {
-                id: 15,
-                name: 'item_12 121212',
-                description: 'description of this item bla bla bla',
-                image: '',
-                price: 100.2
-            },
-            {
-                id: 16,
-                name: 'item_13 131313',
-                description: 'description of this item bla bla bla',
-                image: '',
-                price: 100.2
-            },
-            {
-                id: 17,
-                name: 'item_14',
-                description: 'description of this item bla bla bla',
-                image: '',
-                price: 100.2
-            },
-            {
-                id: 18,
-                name: 'item_11',
-                description: 'description of this item bla bla bla',
-                image: '',
-                price: 100.2
-            },
-            {
-                id: 19,
-                name: 'item_12 121212',
-                description: 'description of this item bla bla bla',
-                image: '',
-                price: 100.2
-            },
-            {
-                id: 20,
-                name: 'item_13 131313',
-                description: 'description of this item bla bla bla',
-                image: '',
-                price: 100.2
-            },
-            {
-                id: 21,
-                name: 'item_14',
-                description: 'description of this item bla bla bla',
-                image: '',
-                price: 100.2
-            },
-            {
-                id: 22,
-                name: 'item_11',
-                description: 'description of this item bla bla bla',
-                image: '',
-                price: 100.2
-            },
-            {
-                id: 23,
-                name: 'item_12 121212',
-                description: 'description of this item bla bla bla',
-                image: '',
-                price: 100.2
-            },
-            {
-                id: 24,
-                name: 'item_13 131313',
-                description: 'description of this item bla bla bla',
-                image: '',
-                price: 100.2
-            },
-            {
-                id: 25,
-                name: 'item_14',
-                description: 'description of this item bla bla bla',
-                image: '',
-                price: 100.2
-            },
-        ]
-    },
-    {
-        name: 'Nigiri',
-        items: [
-        ]
-    },
-    {
-        name: 'Hosomaki',
-        items: [
-
-        ]
-    }
-]
+const { REACT_APP_API_SERVER } = process.env;
 
 const Menus = styled.div`
     position: sticky;
@@ -278,8 +66,8 @@ const Left = styled.div`
     flex: 1;
 `;
 
-const Menu = ({ data, i, setMenu, menu }) => {
-    const selectMenu = useCallback(() => setMenu(i), [i, setMenu]);
+const Menu = ({ data, i, changeMenu, menu }) => {
+    const selectMenu = useCallback(() => changeMenu(i), [i, changeMenu]);
     return <MenuLink key={i} selected={menu === i} onClick={selectMenu}>{data.name}</MenuLink>
 };
 
@@ -291,27 +79,35 @@ const OrderNow = () => {
 
     const [order, setOrder] = useState(null);
     const [menu, setMenu] = useState(0);
-    const [data, setData] = useState(null);
+    const [menus, setMenus] = useState(null);
+    const [items, setItems] = useState(null);
+    const [mountList, setMountList] = useState(true);
+
+    const changeMenu = useCallback(menu => {
+        setMenu(menu);
+        setMountList(false);
+    }, []);
+
+    useEffect(() => { if (!mountList) setMountList(true); }, [mountList]);
 
     useEffect(() => {
-        setTimeout(() => {
-            setData(fakeMenuData);
+        (async () => {
+            const res = await api('/menu');
+            if (res.status === 200 && res.success) {
+                setMenus(res.menus);
+                setItems(res.items);
+            }
 
             const order = JSON.parse(localStorage.getItem('order'));
             const newOrder = [];
             if (order) {
                 for (const item of order) {
-                    let menuItem = (() => {
-                        for (const menu of fakeMenuData) {
-                            const menuItem = menu.items.find(i => i.id === item.id);
-                            if (menuItem) return menuItem;
-                        }
-                    })();
+                    let menuItem = res.items.find(i => i.id === item.id);
                     if (menuItem) newOrder.push({ ...menuItem, count: item.count });
                 }
             }
             setOrder(newOrder);
-        }, 100);
+        })();
     }, []);
 
     useEffect(() => {
@@ -341,12 +137,12 @@ const OrderNow = () => {
         });
     }, []);
 
-    if (data) return (
+    if (menus && items && menus[menu]) return (
         <Container>
             <Left>
-                {data[menu].banner && <Banner src={data[menu].banner} />}
-                <Menus>{data.map((data, i) => <Menu key={i} {...{ data, i, setMenu, menu }} />)}</Menus>
-                <List add={addToOrder} data={data[menu].items} {...data[menu]} order={order} />
+                {menus[menu].banner && <Banner src={`${REACT_APP_API_SERVER}/${menus[menu].banner}`} />}
+                <Menus>{menus.sort((a, b) => a.id - b.id).map((data, i) => <Menu key={i} {...{ data, i, changeMenu, menu }} />)}</Menus>
+                <List {...menus[menu]} add={addToOrder} data={items.filter(i => i.menu_id === menus[menu].id).sort((a, b) => a.id - b.id)} {...menus[menu]} order={mountList ? order : null} />
             </Left>
             <Cart order={order} add={addToOrder} />
         </Container>

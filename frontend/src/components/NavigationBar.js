@@ -42,17 +42,17 @@ const Item = styled.div`
 
 const NavigationBar = () => {
     const history = useHistory();
-    const main = useCallback(() => history.push('/'), [history]);
-    const home = useCallback(() => history.push('/home'), [history]);
+    const orderNow = useCallback(() => history.push('/jetzt-bestellen'), [history]);
     const menu = useCallback(() => history.push('/speisekarte'), [history]);
+    const home = useCallback(() => history.push('/'), [history]);
     const contact = useCallback(() => history.push('/kontakt'), [history]);
     const imprint = useCallback(() => history.push('/impressum'), [history]);
 
     return (
         <Bar>
-            <Item onClick={home}>Home</Item>
+            <Item onClick={orderNow}>Bestellen</Item>
             <Item onClick={menu}>Speisekarte</Item>
-            <Brand onClick={main} src={BrandImg}></Brand>
+            <Brand onClick={home} src={BrandImg}></Brand>
             <Item onClick={contact}>Kontakt</Item>
             <Item onClick={imprint}>Impressum</Item>
         </Bar>

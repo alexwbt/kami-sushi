@@ -20,12 +20,10 @@ const ButtonWrapper = styled.div`
     bottom: 0;
     position: sticky;
     padding: 7px 20px;
-    background-color: ${props => props.theme.grey};
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
 
     ${props => props.small ? `
         position: fixed;
-        background: none;
         box-shadow: none;
 
         animation: ${props.open ? 'buttonSlideLeft' : 'buttonSlideRight'} 0.15s linear forwards;

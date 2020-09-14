@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { wrapper } from ".";
+import { wrapper, fileWrapper } from ".";
 import { getAllItem } from "../services/ItemService";
 import { createMenu, deleteMenu, editMenu, getAllMenu } from "../services/MenuService";
 import tables, { MENU_I } from "../tables";
@@ -17,29 +17,28 @@ router.get("/", wrapper(async (req: Request, res: Response) => {
     });
 }));
 
-router.post("/", isLoggedIn, image, wrapper(async (req: Request, res: Response) => {
-    const { name, min_column, max_column, padding } = req.body;
+router.post("/", isLoggedIn, image, fileWrapper(async (req: Request, res: Response) => {
+    const data = JSON.parse(req.body.data);
 
-    console.log(req.body);
-
-    const valid = tables[MENU_I].valid(req.body);
+    const valid = tables[MENU_I].valid(data);
     if (valid !== true) return valid;
 
     const banner = req.file ? req.file.filename : "";
-    await createMenu({ name, min_column, max_column, padding, banner });
+    await createMenu({ ...data, banner });
 
     res.status(200).json({ success: true });
 }));
 
-router.put("/", isLoggedIn, wrapper(async (req: Request, res: Response) => {
-    const { id, name, min_column, max_column, padding, banner } = req.body;
+router.put("/", isLoggedIn, image, fileWrapper(async (req: Request, res: Response) => {
+    const data = JSON.parse(req.body.data);
 
-    if (typeof id !== "number" || id < 1) return "Invalid id";
+    if (typeof data.id !== "number" || data.id < 1) return "Invalid id";
 
-    const valid = tables[MENU_I].valid(req.body);
+    const valid = tables[MENU_I].valid(data);
     if (valid !== true) return valid;
 
-    await editMenu({ id, name, min_column, max_column, padding, banner });
+    const banner = req.file ? req.file.filename : (req.body.deleteBanner ? "" : undefined);
+    await editMenu({ ...data, banner });
 
     res.status(200).json({ success: true });
 }));

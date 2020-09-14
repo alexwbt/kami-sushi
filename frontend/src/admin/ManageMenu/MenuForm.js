@@ -1,120 +1,9 @@
-import React, { useState, useCallback } from 'react';
-import styled from 'styled-components';
-import { createMenu } from 'services/admin';
+import { useCheckbox, useInput, useNumberInput } from 'hooks/input';
+import React, { useCallback, useState } from 'react';
+import { deleteMenu, menu } from 'services/admin';
+import { Background, Button, CloseButton, Error, Input, Label, Model, Title } from './FormStyle';
 
-const Background = styled.div`
-    background-color: rgba(0, 0, 0, 0.5);
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    top: 0;
-`;
-
-const Model = styled.div`
-    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
-    transform: translate(-50%, -50%);
-    background-color: #333;
-    display: inline-block;
-    text-align: center;
-    position: fixed;
-    font-size: 20px;
-    padding: 20px;
-    color: white;
-    left: 50%;
-    top: 50%;
-
-    @media (max-width: 700px) {
-        font-size: 12px;
-    }
-`;
-
-const Title = styled.div`
-    border-bottom: 1px solid grey;
-    padding-bottom: 10px;
-`;
-
-const Input = styled.input`
-    ${props => props.noPadding ? '' : 'padding: 5px 10px;'}
-    font-size: 20px;
-    margin: 5px 0;
-
-    @media (max-width: 700px) {
-        font-size: 12px;
-    }
-`;
-
-const Label = styled.label`
-    margin-top: 10px;
-    text-align: left;
-    display: block;
-`;
-
-const Button = styled.div`
-    ${props => props.margin ? 'margin-top: 20px;' : 'margin: 5px 0;'}
-    background-color: grey;
-    padding: 5px;
-    cursor: pointer;
-    :hover {
-        background-color: black;
-    }
-`;
-
-const Error = styled.div`
-    color: ${props => props.theme.red};
-    margin-top: 10px;
-`;
-
-const CloseButton = styled.div`
-    position: absolute;
-    right: 5px;
-    top: 5px;
-    width: 30px;
-    height: 30px;
-    opacity: 0.3;
-    cursor: pointer;
-
-    :hover {
-        opacity: 1;
-    }
-    :before, :after {
-        position: absolute;
-        left: 13px;
-        content: '';
-        height: 30px;
-        width: 2px;
-        background-color: white;
-    }
-    :before {
-        transform: rotate(45deg);
-    }
-    :after {
-        transform: rotate(-45deg);
-    }
-`;
-
-const useNumberInput = (defaultValue, min = 0, max = 100) => {
-    const [value, setValue] = useState(defaultValue);
-
-    const setNumberValue = useCallback(e => {
-        const newValue = e.target.value.replace(/[^0-9]/g, '');
-        setValue(newValue ? Math.min(max, Math.max(min, +newValue)) : '');
-    }, [min, max]);
-
-    return [value, setNumberValue];
-};
-
-const useInput = defaultValue => {
-    const [value, setValue] = useState(defaultValue);
-
-    const setStringValue = useCallback(e => {
-        setValue(e.target.value);
-    }, []);
-
-    return [value, setStringValue];
-};
-
-const MenuForm = ({ data, toggleMenu, getData }) => {
+const MenuForm = ({ data, closeForm, getData }) => {
     const [error, setError] = useState('');
     const [name, setName] = useInput(data?.name || '');
     const [minCol, setMinCol] = useNumberInput(data?.min_column || '', 1, 5);
@@ -122,40 +11,47 @@ const MenuForm = ({ data, toggleMenu, getData }) => {
     const [padding, setPadding] = useNumberInput(data?.padding || '', 0, 10);
     const [direction, setDirection] = useState(data?.direction);
     const [banner, setBanner] = useState(null);
+    const [deleteBanner, setDeleteBanner] = useCheckbox(false);
 
-    const switchDirection = useCallback(() => {
-        setDirection(direction => !direction);
-    }, []);
-
-    const onImageChange = useCallback(e => {
-        setBanner(e.target.files[0]);
-    }, []);
+    const switchDirection = useCallback(() => { setDirection(direction => !direction); }, []);
+    const onImageChange = useCallback(e => { setBanner(e.target.files[0]); }, []);
 
     const submit = useCallback(async () => {
         setError('');
-        const data = new FormData();
-        data.append('image', banner);
-        data.append('data', JSON.stringify({
+        const formData = new FormData();
+        formData.append('image', banner);
+        formData.append('data', JSON.stringify({
+            id: data ? data.id : undefined,
             name,
-            min_column: +minCol,
-            max_column: +maxCol,
-            padding: +padding,
+            min_column: +minCol || undefined,
+            max_column: +maxCol || undefined,
+            padding: +padding || undefined,
             direction,
-            image: banner
         }));
-        const res = await createMenu(data);
+        if (deleteBanner) formData.append('deleteBanner', deleteBanner);
+        const res = await menu(formData, !!data);
         if (res.status === 200 && res.success) {
-            toggleMenu(false);
+            closeForm();
             getData();
         } else {
             setError(res.message);
         }
-    }, [name, minCol, maxCol, padding, direction, toggleMenu, getData, banner]);
+    }, [name, minCol, maxCol, padding, direction, banner, deleteBanner, closeForm, getData, data]);
+
+    const del = useCallback(async () => {
+        const res = await deleteMenu(data.id);
+        if (res.status === 200 && res.success) {
+            closeForm();
+            getData();
+        } else {
+            setError(res.message);
+        }
+    }, [closeForm, getData, data.id]);
 
     return (
         <Background>
             <Model>
-                <CloseButton onClick={toggleMenu} />
+                <CloseButton onClick={closeForm} />
                 <Title>{data ? 'Edit' : 'Create'} Menu</Title>
                 <Label>
                     Name<br />
@@ -177,9 +73,11 @@ const MenuForm = ({ data, toggleMenu, getData }) => {
                 </Label>
                 <Label>
                     Banner<br />
-                    <Input type="file" noPadding onChange={onImageChange} />
+                    <Input type='file' noPadding onChange={onImageChange} />
+                    {data && <span>delete <Input type='checkbox' onChange={setDeleteBanner} value={deleteBanner} /></span>}
                 </Label>
                 <Button margin onClick={submit}>Submit</Button>
+                {data && <Button margin onClick={del}>Delete</Button>}
                 {error && <Error>{error}</Error>}
             </Model>
         </Background>

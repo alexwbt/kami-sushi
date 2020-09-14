@@ -30,6 +30,7 @@ export type MenuItem = {
     id?: number;
     name: string;
     description: string;
+    price: number;
     image: string;
     menu_id: number;
     created_at?: string;
@@ -89,6 +90,7 @@ const tables: TableList = [
             table.string("name").notNullable();
             table.string("description").defaultTo("");
             table.string("image").defaultTo("");
+            table.float("price").notNullable();
             table.integer("menu_id").notNullable().references(`${MENU}.id`).onUpdate("CASCADE").onDelete("CASCADE");
             table.timestamps(false, true);
         },
@@ -101,6 +103,7 @@ const tables: TableList = [
             if (typeof d.name !== "string" || d.name.length <= 0) return "Invalid item name";
             if (typeof d.description !== "string") return "Invalid description";
             if (typeof d.image !== "string") return "Invalid image path";
+            if (typeof d.price !== "number" || d.price < 0) return "Invalid price";
             if (typeof d.menu_id !== "number" || d.menu_id < 1) return "Invalid menu id";
             return true;
         }

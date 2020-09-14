@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
+const { REACT_APP_API_SERVER } = process.env;
+
 const ItemWrapper = styled.div`
     padding: ${props => props.padding}px;
     :hover {
@@ -9,8 +11,9 @@ const ItemWrapper = styled.div`
 `;
 
 const ItemComponent = styled.div`
+    ${props => props.direction ? 'display: flex;' : ''}
     position: relative;
-    border-radius: ${props => props.padding}px;
+    border-radius: 2px;
     background-color: ${props => props.theme.dark};
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
     animation: fadeIn 0.2s linear;
@@ -26,13 +29,27 @@ const ItemComponent = styled.div`
 `;
 
 const ItemImage = styled.img`
-    display: block;
-    border-radius: 10px 10px 0 0;
-    width: 100%;
+    object-fit: cover;
+    ${props => props.direction ? `
+        max-width: 30%;
+        @media (min-width: 1500px) {
+            max-width: 15%;
+        }
+    ` : `
+        width: 100%;
+        display: block;
+    `}
+    border-radius: 2px 2px 0 0;
+    pointer-events: none;
 `;
 
 const ItemDetail = styled.div`
     padding: 5px 15px 15px 15px;
+    ${props => props.direction ? `
+        flex: 1;
+        display: inline-block;
+        vertical-align: top;
+    ` : ''}
 `;
 
 const ItemName = styled.div`
@@ -60,14 +77,14 @@ const ItemDescription = styled.div`
     }
 `;
 
-const Item = ({ item, add, padding }) => {
+const Item = ({ item, add, padding, direction }) => {
     const addToOrder = useCallback(() => add(item, 1), [add, item]);
-
+    
     return (
         <ItemWrapper padding={padding}>
-            <ItemComponent onClick={addToOrder} padding={padding}>
-                <ItemImage src={item.image} />
-                <ItemDetail>
+            <ItemComponent onClick={addToOrder} padding={padding} direction={+direction}>
+                {item.image && <ItemImage src={`${REACT_APP_API_SERVER}/${item.image}`} direction={+direction} />}
+                <ItemDetail direction={+direction}>
                     <ItemName>{item.name}</ItemName>
                     <ItemPrice>{`€${item.price}`.replace(/\./g, ',')}</ItemPrice>
                     <ItemDescription>{item.description}</ItemDescription>

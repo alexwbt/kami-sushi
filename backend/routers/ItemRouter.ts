@@ -1,31 +1,34 @@
-import { Router, Request, Response } from "express";
-import { wrapper } from ".";
-import { isLoggedIn } from "../utils/passport";
+import { Request, Response, Router } from "express";
+import { fileWrapper, wrapper } from ".";
+import { createItem, deleteItem, editItem } from "../services/ItemService";
 import tables, { ITEM_I } from "../tables";
-import { createItem, editItem, deleteItem } from "../services/ItemService";
+import { image } from "../utils/multer";
+import { isLoggedIn } from "../utils/passport";
 
 const router = Router();
 
-router.post("/", isLoggedIn, wrapper(async (req: Request, res: Response) => {
-    const { name, description, image, menu_id } = req.body;
+router.post("/", isLoggedIn, image, fileWrapper(async (req: Request, res: Response) => {
+    const data = JSON.parse(req.body.data);
 
-    const valid = tables[ITEM_I].valid(req.body);
+    const valid = tables[ITEM_I].valid(data);
     if (valid !== true) return valid;
 
-    await createItem({ name, description, image, menu_id });
+    const image = req.file ? req.file.filename : (req.body.deleteImage ? "" : undefined);
+    await createItem({ ...data, image });
 
     res.status(200).json({ success: true });
 }));
 
-router.put("/", isLoggedIn, wrapper(async (req: Request, res: Response) => {
-    const { id, name, description, image, menu_id } = req.body;
+router.put("/", isLoggedIn, image, fileWrapper(async (req: Request, res: Response) => {
+    const data = JSON.parse(req.body.data);
 
-    if (typeof id !== "number" || id < 1) return "Invalid id";
+    if (typeof data.id !== "number" || data.id < 1) return "Invalid id";
 
-    const valid = tables[ITEM_I].valid(req.body);
+    const valid = tables[ITEM_I].valid(data);
     if (valid !== true) return valid;
 
-    await editItem({ id, name, description, image, menu_id });
+    const image = req.file ? req.file.filename : (req.body.deleteImage ? "" : undefined);
+    await editItem({ ...data, image });
 
     res.status(200).json({ success: true });
 }));

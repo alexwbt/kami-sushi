@@ -1,23 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Item from './Item';
 
 const Container = styled.div`
-    flex: 1;
     position: relative;
-    background-color: ${props => props.theme.grey};
+    background-color: ${props => props.theme.darkBlue};
     color: white;
-
-    @media (min-width: 1200px) {
-        padding: 0 5vw;
-    }
+    padding: 10px;
+    flex: 1;
 
     @media (min-width: 1500px) {
-        padding: 0 15vw;
-    }
-
-    @media (min-width: 1800px) {
-        padding: 0 20vw;
+        padding: 10px 10vw;
     }
 `;
 
@@ -28,8 +21,10 @@ const Column = styled.div`
     width: ${props => props.width}%;
 `;
 
-const List = ({ add, data, min_column = 2, max_column = 4, padding }) => {
+const List = ({ editItem, data, min_column = 2, max_column = 4, padding = 5, direction }) => {
     const [columnCount, setCount] = useState(1);
+
+    const openEditItemForm = useCallback(item => { editItem(item); }, [editItem]);
 
     useEffect(() => {
         const resize = () => {
@@ -44,7 +39,7 @@ const List = ({ add, data, min_column = 2, max_column = 4, padding }) => {
     }, [min_column, max_column]);
 
     const divide = Math.ceil(data.length / columnCount);
-    const mapFunction = (item, i) => <Item key={i} item={item} add={add} padding={padding} />;
+    const mapFunction = (item, i) => <Item key={i} item={item} add={openEditItemForm} padding={padding} direction={direction} />;
     return (
         <Container>
             {Array(columnCount).fill().map((e, i) => <Column key={i} width={100 / columnCount}>{data.slice(divide * i, divide * (i + 1)).map(mapFunction)}</Column>)}

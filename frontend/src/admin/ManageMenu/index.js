@@ -2,8 +2,11 @@ import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import List from './List';
 import MenuForm from './MenuForm';
+import ItemForm from './ItemForm';
 import { api } from 'services';
 import { useEffect } from 'react';
+
+const { REACT_APP_API_SERVER } = process.env;
 
 const Menus = styled.div`
     position: sticky;
@@ -11,7 +14,6 @@ const Menus = styled.div`
     background-color: ${props => props.theme.darkGrey};
     padding: 10px;
     font-size: 20px;
-    z-index: 1;
     text-align: center;
     white-space: nowrap;
     overflow: auto;
@@ -87,7 +89,7 @@ const ManageMenu = () => {
     const [menus, setMenus] = useState(null);
     const [items, setItems] = useState(null);
     const [menu, setMenu] = useState(0);
-    const [menuForm, setMenuForm] = useState(false);
+    const [openForm, setOpenForm] = useState(false);
 
     const getData = useCallback(async () => {
         const res = await api('/menu');
@@ -99,32 +101,40 @@ const ManageMenu = () => {
 
     useEffect(() => { getData(); }, [getData]);
 
-    const toggleMenu = useCallback(() => { setMenuForm(open => !open); }, []);
-    const editMenu = useCallback(data => { setMenuForm(data); }, []);
+    const closeForm = useCallback(() => { setOpenForm(false); }, []);
+    const createMenu = useCallback(() => { setOpenForm('menu'); }, []);
+    const editMenu = useCallback(data => { setOpenForm(data); }, []);
+    const createItem = useCallback(() => { setOpenForm('item'); }, []);
+    const editItem = useCallback(data => { setOpenForm(data); }, []);
 
     return menus && items && (
         <>
             {
                 menus.length > 0 && <Container>
-                    {menus[menu].banner && <Banner src={menus[menu].banner} />}
                     <CreateButtons>
-                        <Button onClick={toggleMenu}>Create Menu</Button>
-                        <Button onClick={toggleMenu}>Create Item</Button>
+                        <Button onClick={createMenu}>Create Menu</Button>
+                        <Button onClick={createItem}>Create Item</Button>
                     </CreateButtons>
+                    {menus[menu].banner && <Banner src={`${REACT_APP_API_SERVER}/${menus[menu].banner}`} />}
                     <Menus>
-                        {menus.map((data, i) => <Menu key={i} {...{ data, i, setMenu, menu, editMenu }} />)}
+                        {menus.sort((a, b) => a.id - b.id).map((data, i) => <Menu key={i} {...{ data, i, setMenu, menu, editMenu }} />)}
                     </Menus>
-                    <List add={() => { }} padding={menus[menu].padding} data={items} />
+                    <List {...menus[menu]} data={items.filter(i => i.menu_id === menus[menu].id).sort((a, b) => a.id - b.id)} editItem={editItem} />
                 </Container>
             }
             {
                 menus.length === 0 && <Empty>
                     <div>No menu...</div>
-                    <Button onClick={toggleMenu}>Create Menu</Button>
+                    <Button onClick={createMenu}>Create Menu</Button>
                 </Empty>
             }
             {
-                menuForm && <MenuForm toggleMenu={toggleMenu} getData={getData} data={typeof menuForm === 'object' && menuForm} />
+                (openForm === 'menu' || (typeof openForm === 'object' && openForm.menu_id === undefined))
+                && <MenuForm closeForm={closeForm} getData={getData} data={typeof openForm === 'object' && openForm} />
+            }
+            {
+                (openForm === 'item' || (typeof openForm === 'object' && openForm.menu_id !== undefined))
+                && <ItemForm menuId={menus[menu].id} closeForm={closeForm} getData={getData} data={typeof openForm === 'object' && openForm} />
             }
         </>
     );

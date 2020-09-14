@@ -7,7 +7,6 @@ const Container = styled.div`
     background-color: ${props => props.theme.darkBlue};
     color: white;
     padding: 10px;
-    flex: 1;
 
     @media (min-width: 1500px) {
         padding: 10px 10vw;
@@ -21,12 +20,13 @@ const Column = styled.div`
     width: ${props => props.width}%;
 `;
 
-const List = ({ add, data, order, min_column = 2, max_column = 4, padding, direction }) => {
-    const [columnCount, setCount] = useState(1);
-    const [mount, setMount] = useState(true);
+const Empty = styled.div`
+    background-color: ${props => props.theme.darkBlue};
+    height: 95vh;
+`;
 
-    useEffect(() => { setMount(false) }, [data]);
-    useEffect(() => { if (!mount) setMount(true) }, [mount]);
+const List = ({ add, data, order, min_column = 2, max_column = 4, padding = 5, direction }) => {
+    const [columnCount, setCount] = useState(1);
 
     useEffect(() => {
         const resize = () => {
@@ -40,7 +40,7 @@ const List = ({ add, data, order, min_column = 2, max_column = 4, padding, direc
         return () => window.removeEventListener('resize', resize);
     }, [min_column, max_column]);
 
-    if (!mount || order === null) return null;
+    if (order === null) return <Empty />;
     const divide = Math.ceil(data.length / columnCount);
     const mapFunction = (item, i) => <Item key={i} item={item} add={add} padding={padding} direction={direction} count={order.find(o => o.id === item.id)?.count} />;
     return (

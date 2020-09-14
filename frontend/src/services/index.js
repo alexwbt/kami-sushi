@@ -1,14 +1,17 @@
 
-export const api = async (url, options = {}) => {
+export const api = async (url, options = {}, noHeaders) => {
     try {
-        const res = await fetch(process.env.REACT_APP_API_SERVER + url, {
+        const fetchOptions = {
             ...options,
-            headers: {
+            credentials: 'include'
+        };
+        if (!noHeaders) {
+            fetchOptions.headers = {
                 'Content-Type': 'application/json; charset=UTF-8',
                 ...options.headers
-            },
-            credentials: 'include'
-        });
+            };
+        }
+        const res = await fetch(process.env.REACT_APP_API_SERVER + url, fetchOptions);
         return { status: res.status, ...await res.json() };
     } catch (err) {
         return err;

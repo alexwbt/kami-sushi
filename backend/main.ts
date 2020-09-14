@@ -21,6 +21,7 @@ app.use(loggerMiddleware);
 app.use("/menu", menuRouter);
 app.use("/item", itemRouter);
 app.use("/auth", authRouter);
+app.use(express.static('public'));
 
 const server = http.createServer(app);
 const io = socketIO(server);
