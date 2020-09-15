@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Item from './Item';
+import { useRef } from 'react';
 
 const Container = styled.div`
     position: relative;
@@ -22,11 +23,12 @@ const Column = styled.div`
 
 const Empty = styled.div`
     background-color: ${props => props.theme.darkBlue};
-    height: 95vh;
+    height: ${props => props.height};
 `;
 
 const List = ({ add, data, order, min_column = 2, max_column = 4, padding = 5, direction }) => {
     const [columnCount, setCount] = useState(1);
+    const container = useRef(null);
 
     useEffect(() => {
         const resize = () => {
@@ -40,11 +42,11 @@ const List = ({ add, data, order, min_column = 2, max_column = 4, padding = 5, d
         return () => window.removeEventListener('resize', resize);
     }, [min_column, max_column]);
 
-    if (order === null) return <Empty />;
+    if (order === null) return <Empty height={container.current ? container.current.clientHeight : '100vh'} />;
     const divide = Math.ceil(data.length / columnCount);
     const mapFunction = (item, i) => <Item key={i} item={item} add={add} padding={padding} direction={direction} count={order.find(o => o.id === item.id)?.count} />;
     return (
-        <Container>
+        <Container ref={container}>
             {Array(columnCount).fill().map((e, i) => <Column key={i} width={100 / columnCount}>{data.slice(divide * i, divide * (i + 1)).map(mapFunction)}</Column>)}
         </Container>
     );

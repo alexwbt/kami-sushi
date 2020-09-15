@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { fileWrapper, wrapper } from ".";
+import { wrapper, deleteFile } from ".";
 import { createItem, deleteItem, editItem } from "../services/ItemService";
 import tables, { ITEM_I } from "../tables";
 import { image } from "../utils/multer";
@@ -7,7 +7,7 @@ import { isLoggedIn } from "../utils/passport";
 
 const router = Router();
 
-router.post("/", isLoggedIn, image, fileWrapper(async (req: Request, res: Response) => {
+router.post("/", isLoggedIn, image, wrapper(async (req: Request, res: Response) => {
     const data = JSON.parse(req.body.data);
 
     const valid = tables[ITEM_I].valid(data);
@@ -17,9 +17,9 @@ router.post("/", isLoggedIn, image, fileWrapper(async (req: Request, res: Respon
     await createItem({ ...data, image });
 
     res.status(200).json({ success: true });
-}));
+}), deleteFile);
 
-router.put("/", isLoggedIn, image, fileWrapper(async (req: Request, res: Response) => {
+router.put("/", isLoggedIn, image, wrapper(async (req: Request, res: Response) => {
     const data = JSON.parse(req.body.data);
 
     if (typeof data.id !== "number" || data.id < 1) return "Invalid id";
@@ -31,7 +31,7 @@ router.put("/", isLoggedIn, image, fileWrapper(async (req: Request, res: Respons
     await editItem({ ...data, image });
 
     res.status(200).json({ success: true });
-}));
+}), deleteFile);
 
 router.delete("/", isLoggedIn, wrapper(async (req: Request, res: Response) => {
     const { id } = req.body;

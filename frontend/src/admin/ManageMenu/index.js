@@ -56,6 +56,7 @@ const Empty = styled.div`
     font-size: 30px;
     padding: 30px;
     text-align: center;
+    color: white;
     flex: 1;
 `;
 

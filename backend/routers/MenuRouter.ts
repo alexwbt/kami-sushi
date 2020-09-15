@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { wrapper, fileWrapper } from ".";
+import { wrapper, imageWrapper } from ".";
 import { getAllItem } from "../services/ItemService";
 import { createMenu, deleteMenu, editMenu, getAllMenu } from "../services/MenuService";
 import tables, { MENU_I } from "../tables";
@@ -17,7 +17,7 @@ router.get("/", wrapper(async (req: Request, res: Response) => {
     });
 }));
 
-router.post("/", isLoggedIn, image, fileWrapper(async (req: Request, res: Response) => {
+router.post("/", isLoggedIn, image, imageWrapper(async (req: Request, res: Response) => {
     const data = JSON.parse(req.body.data);
 
     const valid = tables[MENU_I].valid(data);
@@ -29,7 +29,7 @@ router.post("/", isLoggedIn, image, fileWrapper(async (req: Request, res: Respon
     res.status(200).json({ success: true });
 }));
 
-router.put("/", isLoggedIn, image, fileWrapper(async (req: Request, res: Response) => {
+router.put("/", isLoggedIn, image, imageWrapper(async (req: Request, res: Response) => {
     const data = JSON.parse(req.body.data);
 
     if (typeof data.id !== "number" || data.id < 1) return "Invalid id";

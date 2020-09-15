@@ -5,12 +5,10 @@ const { REACT_APP_API_SERVER } = process.env;
 
 const ItemWrapper = styled.div`
     padding: ${props => props.padding}px;
-    :hover {
-        padding: 0;
-    }
 `;
 
 const ItemComponent = styled.div`
+    border: 2px solid ${props => props.theme.secondaryGrey};
     ${props => props.direction ? 'display: flex;' : ''}
     position: relative;
     border-radius: 2px;
@@ -23,7 +21,7 @@ const ItemComponent = styled.div`
     }
 
     :hover {
-        border: ${props => props.padding}px solid white;
+        border: 2px solid white;
     }
     cursor: pointer;
 `;

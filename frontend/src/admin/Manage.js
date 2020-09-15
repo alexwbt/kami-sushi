@@ -12,10 +12,6 @@ const SideBar = styled.div`
     background-color: #333;
     color: white;
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
-
-    @media (max-width: 900px) {
-        display: none;
-    }
 `;
 
 const SlideBarItem = styled.div`
