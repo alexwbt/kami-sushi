@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
-import { wrapper, imageWrapper } from ".";
-import { getAllItem } from "../services/ItemService";
-import { createMenu, deleteMenu, editMenu, getAllMenu } from "../services/MenuService";
+import { wrapper } from ".";
+import { getAllItem, deleteItem } from "../services/ItemService";
+import { createMenu, deleteMenu, editMenu, getAllMenu, getMenuBanner, getAllItemImages } from "../services/MenuService";
 import tables, { MENU_I } from "../tables";
 import { image } from "../utils/multer";
 import { isLoggedIn } from "../utils/passport";
@@ -17,7 +17,7 @@ router.get("/", wrapper(async (req: Request, res: Response) => {
     });
 }));
 
-router.post("/", isLoggedIn, image, imageWrapper(async (req: Request, res: Response) => {
+router.post("/", isLoggedIn, image, wrapper(async (req: Request, res: Response) => {
     const data = JSON.parse(req.body.data);
 
     const valid = tables[MENU_I].valid(data);
@@ -29,7 +29,7 @@ router.post("/", isLoggedIn, image, imageWrapper(async (req: Request, res: Respo
     res.status(200).json({ success: true });
 }));
 
-router.put("/", isLoggedIn, image, imageWrapper(async (req: Request, res: Response) => {
+router.put("/", isLoggedIn, image, wrapper(async (req: Request, res: Response) => {
     const data = JSON.parse(req.body.data);
 
     if (typeof data.id !== "number" || data.id < 1) return "Invalid id";
@@ -38,6 +38,7 @@ router.put("/", isLoggedIn, image, imageWrapper(async (req: Request, res: Respon
     if (valid !== true) return valid;
 
     const banner = req.file ? req.file.filename : (req.body.deleteBanner ? "" : undefined);
+    if (req.file || req.body.deleteBanner) res.locals.deleteFile = await getMenuBanner(data.id);
     await editMenu({ ...data, banner });
 
     res.status(200).json({ success: true });
@@ -48,6 +49,12 @@ router.delete("/", isLoggedIn, wrapper(async (req: Request, res: Response) => {
 
     if (typeof id !== "number" || id < 1) return "Invalid id";
 
+    const results = await Promise.all([
+        getMenuBanner(id),
+        getAllItemImages(id)
+    ]);
+    res.locals.deleteFile = results[0];
+    res.locals.deleteFiles = results[1];
     await deleteMenu(id);
 
     res.status(200).json({ success: true });

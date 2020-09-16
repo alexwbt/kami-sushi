@@ -7,7 +7,8 @@ const usePrice = defaultValue => {
     const [price, setPrice] = useState(defaultValue);
 
     const setPriceValue = useCallback(e => {
-        setPrice(+e.target.value.replace(/[^0-9]/g, ''));
+        const value = e.target.value.replace(/[^0-9.]/g, '');
+        if (!isNaN(+value)) setPrice(value);
     }, []);
 
     return [price, setPriceValue];
@@ -31,7 +32,7 @@ const ItemForm = ({ data, closeForm, getData, menuId }) => {
             id: data ? data.id : undefined,
             name,
             description,
-            price,
+            price: +price,
             menu_id: menuId
         }));
         if (deleteImage) formData.append('deleteImage', deleteImage);

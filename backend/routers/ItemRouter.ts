@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
-import { wrapper, deleteFile } from ".";
-import { createItem, deleteItem, editItem } from "../services/ItemService";
+import { wrapper } from ".";
+import { createItem, deleteItem, editItem, getItemImage } from "../services/ItemService";
 import tables, { ITEM_I } from "../tables";
 import { image } from "../utils/multer";
 import { isLoggedIn } from "../utils/passport";
@@ -17,7 +17,7 @@ router.post("/", isLoggedIn, image, wrapper(async (req: Request, res: Response) 
     await createItem({ ...data, image });
 
     res.status(200).json({ success: true });
-}), deleteFile);
+}));
 
 router.put("/", isLoggedIn, image, wrapper(async (req: Request, res: Response) => {
     const data = JSON.parse(req.body.data);
@@ -28,16 +28,18 @@ router.put("/", isLoggedIn, image, wrapper(async (req: Request, res: Response) =
     if (valid !== true) return valid;
 
     const image = req.file ? req.file.filename : (req.body.deleteImage ? "" : undefined);
+    if (req.file || req.body.deleteImage) res.locals.deleteFile = await getItemImage(data.id);
     await editItem({ ...data, image });
 
     res.status(200).json({ success: true });
-}), deleteFile);
+}));
 
 router.delete("/", isLoggedIn, wrapper(async (req: Request, res: Response) => {
     const { id } = req.body;
 
     if (typeof id !== "number" || id < 1) return "Invalid id";
 
+    res.locals.deleteFile = await getItemImage(id);
     await deleteItem(id);
 
     res.status(200).json({ success: true });

@@ -1,6 +1,10 @@
 import { knex } from ".";
 import { MenuItem, ITEM } from "../tables";
 
+export const getItemImage = async (id: number) => {
+    return (await knex<MenuItem>(ITEM).select("image").where({ id }).first()).image;
+};
+
 export const getAllItem = async () => {
     return await knex<MenuItem>(ITEM);
 };

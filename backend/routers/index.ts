@@ -12,30 +12,27 @@ export const wrapper = (routerFunction: (req: Request, res: Response, next?: Nex
             const message = await routerFunction(req, res, next);
             if (message && !res.headersSent) {
                 res.status(400).json({ success: false, message });
-                return;
+                if (req.file) res.locals.deleteFile = req.file.filename;
             }
         } catch (err) {
             Logger.error(err.message);
             if (!res.headersSent) {
                 res.status(500).json({ success: false, message: "Internal Server Error" });
             }
+            if (req.file) res.locals.deleteFile = req.file.filename;
         }
         if (!res.headersSent) {
             Logger.error(req.originalUrl + " doesn't have a response.");
             res.status(500).json({ success: false, message: "No Response" });
         }
-    };
-};
-
-export const deleteFile = async (err, req: Request, res: Response) => {
-    if (req.deleteFile) {
-        try {
-            await new Promise((resolve, reject) => fs.unlink(`public/${req.deleteFile}`, err => {
-                if (err) reject(err);
-                else resolve();
-            }));
-        } catch (err) {
-            Logger.error(err.message);
+        if (res.locals.deleteFile || res.locals.deleteFiles) {
+            const files = [res.locals.deleteFile, ...(res.locals.deleteFiles || [])];
+            await Promise.all(files.map(file => new Promise(resolve => {
+                if (file) fs.unlink(`public/${file}`, err => {
+                    if (err) Logger.error(err.message);
+                    else resolve();
+                }); else resolve();
+            })));
         }
-    }
+    };
 };
