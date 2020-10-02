@@ -12,7 +12,7 @@ const ItemComponent = styled.div`
     ${props => props.direction ? 'display: flex;' : ''}
     position: relative;
     border-radius: 2px;
-    background-color: ${props => props.theme.dark};
+    background-color: rgba(0, 0, 0, 0.7);
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
     animation: fadeIn 0.2s linear;
     @keyframes fadeIn {
@@ -69,27 +69,40 @@ const ItemPrice = styled.div`
 
 const ItemDescription = styled.div`
     font-size: 18px;
-    color: ${props => props.theme.secondaryText};
+    color: #887d33;
     @media (max-width: 900px) {
         font-size: 13px;
     }
 `;
 
-const Item = ({ item, add, padding, direction }) => {
-    const addToOrder = useCallback(() => add(item, 1), [add, item]);
-    
-    return (
-        <ItemWrapper padding={padding}>
-            <ItemComponent onClick={addToOrder} padding={padding} direction={+direction}>
-                {item.image && <ItemImage src={`${REACT_APP_API_SERVER}/${item.image}`} direction={+direction} />}
-                <ItemDetail direction={+direction}>
-                    <ItemName>{item.name}</ItemName>
-                    <ItemPrice>{`€${item.price}`.replace(/\./g, ',')}</ItemPrice>
-                    <ItemDescription>{item.description}</ItemDescription>
-                </ItemDetail>
-            </ItemComponent>
-        </ItemWrapper>
-    );
+const Counter = styled.div`
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+    border-radius: 20px;
+    background-color: ${props => props.theme.green};
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    font-family: Arial;
+`;
+
+const Item = ({ item, onClick, count, padding, direction }) => {
+    const addToOrder = useCallback(() => onClick(item, 1), [onClick, item]);
+    return <ItemWrapper padding={padding}>
+        <ItemComponent onClick={addToOrder} padding={padding} direction={+direction}>
+            {item.image && <ItemImage src={`${REACT_APP_API_SERVER}/${item.image}`} direction={+direction} />}
+            <ItemDetail direction={+direction}>
+                <ItemName>{item.name}</ItemName>
+                <ItemPrice>{`€${item.price}`.replace(/\./g, ',')}</ItemPrice>
+                <ItemDescription>{item.description}</ItemDescription>
+                {count > 0 && <Counter>{count}</Counter>}
+            </ItemDetail>
+        </ItemComponent>
+    </ItemWrapper>;
 };
 
 export default Item;

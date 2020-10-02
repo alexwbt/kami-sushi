@@ -7,6 +7,7 @@ export const Background = styled.div`
     right: 0;
     left: 0;
     top: 0;
+    z-index: 1;
 `;
 
 export const Model = styled.div`

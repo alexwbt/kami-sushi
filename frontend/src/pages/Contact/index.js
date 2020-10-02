@@ -4,7 +4,7 @@ import FormSection from './FormSection';
 import MapSection from './MapSection';
 
 const Container = styled.div`
-    background-color: ${props => props.theme.darkBlue};
+    /* background-color: ${props => props.theme.darkBlue}; */
     color: ${props => props.theme.grey};
 `;
 

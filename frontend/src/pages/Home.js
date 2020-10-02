@@ -6,8 +6,7 @@ import styled from 'styled-components';
 const Container = styled.div`
     position: relative;
     height: calc(100vh - 112px);
-    /* background: linear-gradient(151deg, rgba(105,105,115,1) 0%, rgba(14,19,40,1) 52%, rgba(5,26,45,1) 100%); */
-    background: linear-gradient(151deg, rgba(14,19,36,1) 0%, rgba(0,0,0,1) 100%);
+    /* background-color: rgba(0, 0, 0, 0.6); */
     overflow: hidden;
 
     @media (max-width: 500px) {
@@ -28,21 +27,20 @@ const Image = styled.img`
 
     @media (min-width: 1100px) {
         height: 90%;
-        left: 40%;
     }
 
     @media (max-width: 500px) {
-        transform: translate(-50%, -50%);
-        height: 80%;
+        transform: translate(-55%, -70%);
+        height: 50%;
     }
 `;
 
 const Panel = styled.div`
     position: absolute;
     top: 40%;
-    left: 40%;
-    transform: translate(-50%, -50%);
-    max-width: 40%;
+    left: 50%;
+    transform: translate(-100%, -50%);
+    max-width: 35%;
     color: white;
     font-size: 60px;
     text-shadow: 0px 0px 15px rgba(0, 0, 0, 1);
@@ -52,7 +50,6 @@ const Panel = styled.div`
         font-size: 30px;
         background-color: rgba(0, 0, 0, 0.5);
         padding: 20px;
-        top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         width: 70%;

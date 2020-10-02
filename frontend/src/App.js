@@ -8,7 +8,8 @@ import Menu from 'pages/Menu';
 import OrderNow from 'pages/OrderNow';
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { ThemeProvider } from 'styled-components';
+import BackgroundImg from 'resource/background.png';
+import styled, { ThemeProvider } from 'styled-components';
 
 const styledTheme = {
     dark: '#111115',
@@ -23,27 +24,40 @@ const styledTheme = {
     darkBlue: '#0e1324',
 };
 
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-image: url(${BackgroundImg});
+`;
+
+const Content = styled.div`
+    flex: 1;
+`;
+
 const App = () => {
-    return (
+    return <Container>
         <ThemeProvider theme={styledTheme}>
             <BrowserRouter>
                 <Switch>
                     <Route exact path='/run-teemo-run' component={Admin} />
                     <Route>
                         <NavigationBar />
-                        <Switch>
-                            <Route exact path='/speisekarte' component={Menu} />
-                            <Route exact path='/kontakt' component={Contact} />
-                            <Route exact path='/impressum' component={Imprint} />
-                            <Route exact path='/jetzt-bestellen' component={OrderNow} />
-                            <Route component={Home} />
-                        </Switch>
+                        <Content>
+                            <Switch>
+                                <Route exact path='/speisekarte' component={Menu} />
+                                <Route exact path='/kontakt' component={Contact} />
+                                <Route exact path='/impressum' component={Imprint} />
+                                <Route exact path='/jetzt-bestellen' component={OrderNow} />
+                                <Route component={Home} />
+                            </Switch>
+                        </Content>
                         <Footer />
                     </Route>
                 </Switch>
             </BrowserRouter>
         </ThemeProvider>
-    );
+    </Container>;
 };
 
 export default App;

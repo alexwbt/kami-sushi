@@ -1,6 +1,60 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useCallback, useState } from "react";
 import styled from 'styled-components';
 import CartItem from "./CartItem";
+import { faCashRegister } from '@fortawesome/free-solid-svg-icons'
+
+const DesktopCartButton = styled.div`
+    position: fixed;
+    z-index: 1;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 30px;
+    border-radius: 5px 0 0 5px;
+    border: 2px solid white;
+    border-right: 0;
+    padding: 20px 5px;
+    background-color: rgba(100, 255, 100, 0.5);
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+
+    > * {
+        vertical-align: middle;
+    }
+
+    ${props => props.open !== null ? `animation: ${props.open ? 'buttonSlideLeft' : 'buttonSlideRight'} 0.15s linear forwards;` : ''}
+    @keyframes buttonSlideLeft {
+        from { right: 0; }
+        to { right: 400px; }
+    }
+    @keyframes buttonSlideRight {
+        from { right: 400px; }
+        to { right: 0; }
+    }
+
+    @media (max-width: 1200px) {
+        display: none;
+    }
+`;
+
+const MobileCartButton = styled.div`
+    right: 0;
+    bottom: 10px;
+    position: sticky;
+    padding: 7px 20px;
+    border: 3px solid white;
+    background-color: rgba(100, 200, 100, 0.7);
+    font-weight: bold;
+    border-radius: 3px;
+    margin: 10px;
+    color: white;
+    text-align: center;
+
+    @media (min-width: 1200px) {
+        display: none;
+    }
+`;
 
 const Button = styled.div`
     border-radius: 10px;
@@ -13,35 +67,6 @@ const Button = styled.div`
     text-align: center;
     cursor: pointer;
     z-index: 1;
-`;
-
-const ButtonWrapper = styled.div`
-    right: 0;
-    bottom: 0;
-    position: sticky;
-    padding: 7px 20px;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
-
-    ${props => props.small ? `
-        position: fixed;
-        box-shadow: none;
-
-        animation: ${props.open ? 'buttonSlideLeft' : 'buttonSlideRight'} 0.15s linear forwards;
-        @keyframes buttonSlideLeft {
-            from { transform: 0; }
-            to { transform: translateX(-400px); }
-        }
-        @keyframes buttonSlideRight {
-            from { transform: translateX(-400px); }
-            to { transform: 0; }
-        }
-
-        ${Button} {
-            @media (min-width: 1200px) {
-                box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
-            }
-        }
-    ` : ''}
 `;
 
 const Container = styled.div`
@@ -82,25 +107,6 @@ const Container = styled.div`
             from { width: 0; }
             to { width: 400px; }
         }
-    }
-`;
-
-const ContainerPadding = styled.div`
-    background-color: #f8f8f8;
-    width: 400px;
-
-    @media (max-width: 1200px) {
-        display: none;
-    }
-
-    animation: ${props => props.open ? 'slideRight' : 'slideLeft'} 0.15s linear forwards;
-    @keyframes slideLeft {
-        from { width: 400px; }
-        to { width: 0; }
-    }
-    @keyframes slideRight {
-        from { width: 0; }
-        to { width: 400px; }
     }
 `;
 
@@ -185,7 +191,7 @@ const Total = styled.div`
 `;
 
 const Cart = ({ order, add }) => {
-    const [open, setOpen] = useState(window.innerWidth >= 1200 || null);
+    const [open, setOpen] = useState(null);
 
     const toggleCart = useCallback(() => {
         setOpen(open => {
@@ -195,11 +201,8 @@ const Cart = ({ order, add }) => {
     }, []);
 
     return <>
-        {
-            <ButtonWrapper small={window.innerWidth >= 1200} open={open}>
-                <Button onClick={toggleCart}>BESTELLLISTE</Button>
-            </ButtonWrapper>
-        }
+        <DesktopCartButton open={open} onClick={toggleCart}><FontAwesomeIcon icon={faCashRegister} /></DesktopCartButton>
+        <MobileCartButton open={open} onClick={toggleCart}>BESTELLLISTE</MobileCartButton>
         {
             open !== null && order && <>
                 <Container open={open}>
@@ -216,7 +219,6 @@ const Cart = ({ order, add }) => {
                         <Button>BESTELLEN</Button>
                     </Bottom>
                 </Container>
-                <ContainerPadding open={open} />
             </>
         }
     </>;

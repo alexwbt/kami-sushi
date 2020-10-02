@@ -6,7 +6,7 @@ import BrandImg from 'resource/brand.png';
 const Bar = styled.div`
     padding: 20px 15px;
     text-align: center;
-    background-color: ${props => props.theme.dark};
+    background-color: black;
     color: white;
 `;
 

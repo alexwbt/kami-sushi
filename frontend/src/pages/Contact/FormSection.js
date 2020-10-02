@@ -4,7 +4,8 @@ import { Area, Button, Input, Label } from 'styles/form';
 
 const Container = styled.div`
     padding: 30px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
     color: rgba(255, 255, 255, 0.5);
     text-align: center;
 
