@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { deleteMenu, menu } from 'services/admin';
 import { Background, Button, CloseButton, Error, Input, Label, Model, Title } from './FormStyle';
 
-const MenuForm = ({ data, closeForm, getData }) => {
+const MenuForm = ({ data, closeForm, getData, setShowLoading }) => {
     const [error, setError] = useState('');
     const [name, setName] = useInput(data?.name || '');
     const [minCol, setMinCol] = useNumberInput(data?.min_column || '', 1, 5);
@@ -18,6 +18,7 @@ const MenuForm = ({ data, closeForm, getData }) => {
 
     const submit = useCallback(async () => {
         setError('');
+        setShowLoading(true);
         const formData = new FormData();
         formData.append('image', banner);
         formData.append('data', JSON.stringify({
@@ -36,9 +37,10 @@ const MenuForm = ({ data, closeForm, getData }) => {
         } else {
             setError(res.message);
         }
-    }, [name, minCol, maxCol, padding, direction, banner, deleteBanner, closeForm, getData, data]);
+    }, [name, minCol, maxCol, padding, direction, banner, deleteBanner, closeForm, getData, data, setShowLoading]);
 
     const del = useCallback(async () => {
+        setShowLoading(true);
         const res = await deleteMenu(data.id);
         if (res.status === 200 && res.success) {
             closeForm();
@@ -46,7 +48,7 @@ const MenuForm = ({ data, closeForm, getData }) => {
         } else {
             setError(res.message);
         }
-    }, [closeForm, getData, data.id]);
+    }, [closeForm, getData, data.id, setShowLoading]);
 
     return (
         <Background>

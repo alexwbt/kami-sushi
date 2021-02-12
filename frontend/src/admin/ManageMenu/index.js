@@ -1,5 +1,6 @@
+import Loading from 'components/Loading';
 import OrderMenu from 'components/OrderMenu';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import ItemForm from './ItemForm';
 import MenuForm from './MenuForm';
@@ -37,22 +38,39 @@ const CreateButtons = styled.div`
     padding: 10px 0;
 `;
 
+const LoadingBackground = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2;
+
+    > * {
+        top: 50vh;
+        left: 50vw;
+        transform: translate(-50%, -50%);
+    }
+`;
+
 const ManageMenu = () => {
     const [hasMenu, setHasMenu] = useState(true);
     const [menuId, setMenuId] = useState(0);
     const [openForm, setOpenForm] = useState(false);
+    const [getDataTrigger, setGetDataTrigger] = useState(false);
+    const [showLoading, setShowLoading] = useState(false);
 
     const updatedMenu = useCallback(res => {
-        setHasMenu(res.menus.length > 0)
-    }, []);
+        setHasMenu(res.menus.length > 0);
+        setMenuId(res.menus[0].id);
+        setShowLoading(false);
+        (() => { })(getDataTrigger);
+    }, [getDataTrigger]);
 
     const getData = useCallback(() => {
-        setHasMenu(null);
+        setGetDataTrigger(bool => !bool);
     }, []);
-
-    useEffect(() => {
-        if (hasMenu === null) setHasMenu(true);
-    }, [hasMenu]);
 
     const closeForm = useCallback(() => { setOpenForm(false); }, []);
     const createMenu = useCallback(() => { setOpenForm('menu'); }, []);
@@ -61,6 +79,11 @@ const ManageMenu = () => {
     const editItem = useCallback(data => { setOpenForm(data); }, []);
 
     return <>
+        {
+            showLoading && <LoadingBackground>
+                <Loading />
+            </LoadingBackground>
+        }
         {
             hasMenu && <Container>
                 <CreateButtons>
@@ -78,11 +101,21 @@ const ManageMenu = () => {
         }
         {
             (openForm === 'menu' || (typeof openForm === 'object' && openForm.menu_id === undefined))
-            && <MenuForm closeForm={closeForm} getData={getData} data={typeof openForm === 'object' && openForm} />
+            && <MenuForm
+                closeForm={closeForm}
+                getData={getData}
+                data={typeof openForm === 'object' && openForm}
+                setShowLoading={setShowLoading}
+            />
         }
         {
             (openForm === 'item' || (typeof openForm === 'object' && openForm.menu_id !== undefined))
-            && <ItemForm menuId={menuId} closeForm={closeForm} getData={getData} data={typeof openForm === 'object' && openForm} />
+            && <ItemForm
+                menuId={menuId}
+                closeForm={closeForm}
+                getData={getData}
+                data={typeof openForm === 'object' && openForm}
+                setShowLoading={setShowLoading} />
         }
     </>;
 };

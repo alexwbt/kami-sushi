@@ -18,9 +18,23 @@ const DesktopCartButton = styled.div`
     padding: 20px 5px;
     background-color: rgba(100, 255, 100, 0.5);
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
 
     > * {
         vertical-align: middle;
+    }
+
+    > span {
+        position: absolute;
+        font-size: 12px;
+        font-family: consolas;
+        background-color: red;
+        width: 15px;
+        height: 15px;
+        text-align: center;
+        border-radius: 10px;
+        top: -7px;
+        left: -7px;
     }
 
     ${props => props.open !== null ? `animation: ${props.open ? 'buttonSlideLeft' : 'buttonSlideRight'} 0.15s linear forwards;` : ''}
@@ -50,6 +64,7 @@ const MobileCartButton = styled.div`
     margin: 10px;
     color: white;
     text-align: center;
+    z-index: 1;
 
     @media (min-width: 1200px) {
         display: none;
@@ -201,7 +216,10 @@ const Cart = ({ order, add }) => {
     }, []);
 
     return <>
-        <DesktopCartButton open={open} onClick={toggleCart}><FontAwesomeIcon icon={faCashRegister} /></DesktopCartButton>
+        <DesktopCartButton open={open} onClick={toggleCart}>
+            {order && order.length > 0 && <span>{order.length}</span>}
+            <FontAwesomeIcon icon={faCashRegister} />
+        </DesktopCartButton>
         <MobileCartButton open={open} onClick={toggleCart}>BESTELLLISTE</MobileCartButton>
         {
             open !== null && order && <>

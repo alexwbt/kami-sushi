@@ -38,8 +38,7 @@ const SelectMenuButton = styled.div`
     display: inline-block;
     padding: 10px;
     color: ${props => props.selected ? 'white' : props.theme.secondaryText};
-    border-radius: 10px;
-    background-color: ${props => props.selected ? props.theme.dark : 'none'};
+    background-color: ${props => props.theme.dark};
     cursor: pointer;
 
     @media (max-width: 600px) {

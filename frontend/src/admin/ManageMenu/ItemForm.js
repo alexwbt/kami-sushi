@@ -14,7 +14,7 @@ const usePrice = defaultValue => {
     return [price, setPriceValue];
 };
 
-const ItemForm = ({ data, closeForm, getData, menuId }) => {
+const ItemForm = ({ data, closeForm, getData, menuId, setShowLoading }) => {
     const [error, setError] = useState('');
     const [name, setName] = useInput(data?.name || '');
     const [description, setDescription] = useInput(data?.description || '');
@@ -26,6 +26,7 @@ const ItemForm = ({ data, closeForm, getData, menuId }) => {
 
     const submit = useCallback(async () => {
         setError('');
+        setShowLoading(true);
         const formData = new FormData();
         formData.append('image', image);
         formData.append('data', JSON.stringify({
@@ -43,9 +44,10 @@ const ItemForm = ({ data, closeForm, getData, menuId }) => {
         } else {
             setError(res.message);
         }
-    }, [menuId, name, description, price, image, deleteImage, closeForm, getData, data]);
+    }, [menuId, name, description, price, image, deleteImage, closeForm, getData, data, setShowLoading]);
 
     const del = useCallback(async () => {
+        setShowLoading(true);
         const res = await deleteItem(data.id);
         if (res.status === 200 && res.success) {
             closeForm();
@@ -53,7 +55,7 @@ const ItemForm = ({ data, closeForm, getData, menuId }) => {
         } else {
             setError(res.message);
         }
-    }, [closeForm, getData, data.id]);
+    }, [closeForm, getData, data.id, setShowLoading]);
 
     return (
         <Background>

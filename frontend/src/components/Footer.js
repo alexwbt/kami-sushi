@@ -32,14 +32,14 @@ const Link = styled.span`
 
 const Footer = () => {
     const history = useHistory();
-    const menu = useCallback(() => history.push('/speisekarte'), [history]);
+    // const menu = useCallback(() => history.push('/speisekarte'), [history]);
     const contact = useCallback(() => history.push('/kontakt'), [history]);
     const imprint = useCallback(() => history.push('/impressum'), [history]);
 
     return (
         <Container>
             <div>
-                <Link onClick={menu}>Speisekarte</Link>
+                {/* <Link onClick={menu}>Speisekarte</Link> */}
                 <Link onClick={contact}>Kontakt</Link>
                 <Link onClick={imprint}>Impressum</Link>
             </div>
